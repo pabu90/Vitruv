@@ -90,8 +90,5 @@ FeatureCall returns TypedElement:
 Invariant returns Invariant:
 	'invariant' name=ValidID 
 	'context' context=[ecore::EClass|QualifiedName]
-	('expression' expression=XExpression)?
-	('expression2' expression2=XAssignment)?
-	('expression3' expression3=[types::JvmIdentifiableElement|FeatureCallID])?
-	('expression4' expression4=XMemberFeatureCall)?
+	'check' expression=XExpression
 ;

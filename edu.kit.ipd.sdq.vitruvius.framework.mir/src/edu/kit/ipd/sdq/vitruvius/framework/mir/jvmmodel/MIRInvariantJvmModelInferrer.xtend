@@ -37,18 +37,18 @@ class MIRInvariantJvmModelInferrer {
 	def dispatch void infer(Invariant invariant, IJvmDeclaredTypeAcceptor acceptor, String pkgName, JvmTypeReferenceBuilder typeReferenceBuilder) {
 		this.typeReferenceBuilder = typeReferenceBuilder
 		
-		val contextName = "_self"
 		val contextType = typeRef(invariant.context.instanceClass)
 		
 		
 		acceptor.accept(invariant.toClass(pkgName + ".Invariant" + invariant.name)) [
 			members += invariant.toMethod("check", typeRef(Boolean.TYPE)) [
-				parameters += invariant.toParameter(contextName, contextType)
+				parameters += invariant.toParameter("self", contextType)
 				body = invariant.expression
 			]
 			
+			// TODO: provide correct parameters (maybe even from closure provider)
 			members += invariant.toMethod("findViolation", typeRef(List, typeRef(EObject))) [
-				parameters += invariant.toParameter("context", typeRef(EObject))
+				parameters += invariant.toParameter("context", contextType)
 				body = closureProvider.getInvariantClosure(invariant.expression)
 			]
 		]
