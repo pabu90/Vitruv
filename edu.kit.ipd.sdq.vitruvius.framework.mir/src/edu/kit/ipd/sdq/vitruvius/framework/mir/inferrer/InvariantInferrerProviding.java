@@ -1,8 +1,8 @@
 package edu.kit.ipd.sdq.vitruvius.framework.mir.inferrer;
 
-import org.eclipse.xtext.xbase.XExpression;
-
 import com.google.inject.ImplementedBy;
+
+import edu.kit.ipd.sdq.vitruvius.framework.mir.mIR.Invariant;
 
 /**
  * Infers assignment methods from an expression by putting the correct methods
@@ -11,5 +11,5 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(InvariantInferrer.class)
 public interface InvariantInferrerProviding {
-	public abstract void infer(XExpression expression);
+	public abstract void infer(Invariant inv);
 }

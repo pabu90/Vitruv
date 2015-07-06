@@ -1,22 +1,17 @@
 package edu.kit.ipd.sdq.vitruvius.framework.mir.generator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.xbase.XExpression;
-import org.eclipse.xtext.xbase.lib.ListExtensions;
-
-import com.google.common.collect.Lists;
 
 import edu.kit.ipd.sdq.vitruvius.framework.mir.intermediate.MIRintermediate.MIR;
 import edu.kit.ipd.sdq.vitruvius.framework.mir.jvmmodel.MIRJvmModelInferrer;
+import edu.kit.ipd.sdq.vitruvius.framework.mir.mIR.Invariant;
 import edu.kit.ipd.sdq.vitruvius.framework.mir.mIR.MIRFile;
 
 /**
@@ -33,7 +28,7 @@ public class MIRGeneratorStatus implements IGeneratorStatus {
 	
 	private List<XExpression> whenWheresToInfer;
 	private List<XExpression> withBlocksToInfer;
-	private List<XExpression> invariantsToInfer;
+	private List<Invariant> invariantsToInfer;
 	
 	public MIRGeneratorStatus() {
 		this.objectToName = new HashMap<Object, String>();
@@ -41,7 +36,7 @@ public class MIRGeneratorStatus implements IGeneratorStatus {
 		
 		this.whenWheresToInfer = new ArrayList<XExpression>();
 		this.withBlocksToInfer = new ArrayList<XExpression>();
-		this.invariantsToInfer = new ArrayList<XExpression>();
+		this.invariantsToInfer = new ArrayList<Invariant>();
 	}
 
 	@Override
@@ -102,12 +97,12 @@ public class MIRGeneratorStatus implements IGeneratorStatus {
 	}
 
 	@Override
-	public void addInvariantToInfer(XExpression invariant) {
+	public void addInvariantToInfer(Invariant invariant) {
 		invariantsToInfer.add(invariant);
 	}
 
 	@Override
-	public List<XExpression> getInvariantsToInfer() {
+	public List<Invariant> getInvariantsToInfer() {
 		return Collections.unmodifiableList(invariantsToInfer);
 	}
 

@@ -7,12 +7,13 @@ import java.util.Map
 import org.eclipse.emf.ecore.EPackage
 import org.eclipse.xtext.xbase.XExpression
 import com.google.inject.Singleton
+import edu.kit.ipd.sdq.vitruvius.framework.mir.mIR.Invariant
 
 @Singleton
 class ClosureProvider {
 	private Map<XExpression, Map<EPackage, TreeAppendableClosure>> assignmentClosures
 	private Map<XExpression, Map<EPackage, TreeAppendableClosure>> equalityClosures
-	private Map<XExpression, TreeAppendableClosure> invariantClosures
+	private Map<Invariant, TreeAppendableClosure> invariantClosures
 	
 	@Inject Provider<TreeAppendableClosure> closureProvider
 	@Inject Provider<TreeAppendableConjunctionClosure> conjunctionClosureProvider
@@ -80,10 +81,10 @@ class ClosureProvider {
 	/**
 	 * Returns the invariant closure for the given XExpression.
 	 */
-	public def TreeAppendableClosure getInvariantClosure(XExpression expression) {
-		if (!invariantClosures.containsKey(expression))
-			invariantClosures.put(expression, closureProvider.get())
+	public def TreeAppendableClosure getInvariantClosure(Invariant inv) {
+		if (!invariantClosures.containsKey(inv))
+			invariantClosures.put(inv, closureProvider.get())
 			
-		return invariantClosures.get(expression)
+		return invariantClosures.get(inv)
 	}
 }

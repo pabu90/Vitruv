@@ -43,28 +43,28 @@ class MIRInvariantJvmModelInferrer {
 
 		val contextType = typeRef(invariant.context.instanceClass)
 
-//		val params = new HashMap<String, JvmTypeReference>();
-//		invariant.parameters.forEach[params.put(it.name, typeRef(it.type.instanceClass))]
-
-		//TODO: refactor to use static strings, no copy and paste
-
-		acceptor.accept(invariant.toClass(pkgName + ".Invariant" + invariant.name + "DTO")) [
-			members.addAll(invariant.parameters.map[it.toField(it.name, typeRef(it.type.instanceClass))])
+		// build DTO
+		acceptor.accept(invariant.toClass(pkgName + "." + invariant.name + "DTO")) [
+			members += invariant.context.toField("context", contextType)
+			members.addAll(invariant.parameters.map[it.toField(it.name, typeRef(List, typeRef(it.type.instanceClass)))])
+			members.addAll(invariant.parameters.map[it.toGetter(it.name, typeRef(List, typeRef(it.type.instanceClass)))])
+			members.addAll(invariant.parameters.map[it.toSetter(it.name, typeRef(List, typeRef(it.type.instanceClass)))])
 		]
 
-		acceptor.accept(invariant.toClass(pkgName + ".Invariant" + invariant.name)) [
+		// build invariant
+		acceptor.accept(invariant.toClass(pkgName + "." + invariant.name)) [
 			members += invariant.toMethod("check", typeRef(Boolean.TYPE)) [
 				parameters += invariant.toParameter("self", contextType)
 				body = invariant.expression
 			]
 
-			members += invariant.toMethod("findViolation", typeRef(pkgName + ".Invariant" + invariant.name + "DTO")) [
-				parameters += invariant.toParameter("context", contextType)
-				body = closureProvider.getInvariantClosure(invariant.expression)
+			members += invariant.toMethod("findViolation", typeRef(invariant.name + "DTO")) [
+				parameters += invariant.toParameter("self", contextType)
+				body = closureProvider.getInvariantClosure(invariant)
 			]
 		]
 
-		generatorStatus.addInvariantToInfer(invariant.expression)
+		generatorStatus.addInvariantToInfer(invariant)
 	}
 
 	def setPkName(String pkgName) {
