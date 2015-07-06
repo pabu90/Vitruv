@@ -6,7 +6,7 @@
     modelName="MIR" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="6.0" copyrightFields="false" editPluginID="edu.kit.ipd.sdq.vitruvius.framework.mir.edit"
     editorPluginID="edu.kit.ipd.sdq.vitruvius.framework.mir.editor" runtimeVersion="2.11"
-    usedGenPackages="platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel#//xbase">
+    usedGenPackages="platform:/resource/org.eclipse.xtext.common.types/model/JavaVMTypes.genmodel#//types platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel#//xbase">
   <genPackages prefix="MIR" basePackage="edu.kit.ipd.sdq.vitruvius.framework.mir"
       disposableProviderFactory="true" fileExtensions="mir" ecorePackage="MIR.ecore#/">
     <genClasses ecoreClass="MIR.ecore#//MIRFile">
@@ -39,7 +39,11 @@
     </genClasses>
     <genClasses ecoreClass="MIR.ecore#//Invariant">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MIR.ecore#//Invariant/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MIR.ecore#//Invariant/block"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MIR.ecore#//Invariant/context"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MIR.ecore#//Invariant/expression"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MIR.ecore#//Invariant/expression2"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MIR.ecore#//Invariant/expression3"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MIR.ecore#//Invariant/expression4"/>
     </genClasses>
     <genClasses ecoreClass="MIR.ecore#//ClassMapping"/>
     <genClasses ecoreClass="MIR.ecore#//FeatureMapping"/>
