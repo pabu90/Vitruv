@@ -37,19 +37,23 @@ class MIRInvariantJvmModelInferrer {
 	def dispatch void infer(Invariant invariant, IJvmDeclaredTypeAcceptor acceptor, String pkgName, JvmTypeReferenceBuilder typeReferenceBuilder) {
 		this.typeReferenceBuilder = typeReferenceBuilder
 		
+		val contextName = "_self"
+		val contextType = typeRef(invariant.context.instanceClass)
+		
+		
 		acceptor.accept(invariant.toClass(pkgName + ".Invariant" + invariant.name)) [
 			members += invariant.toMethod("check", typeRef(Boolean.TYPE)) [
-				parameters += invariant.toParameter("context", typeRef(EObject))
-				body = invariant.block
+				parameters += invariant.toParameter(contextName, contextType)
+				body = invariant.expression
 			]
 			
 			members += invariant.toMethod("findViolation", typeRef(List, typeRef(EObject))) [
 				parameters += invariant.toParameter("context", typeRef(EObject))
-				body = closureProvider.getInvariantClosure(invariant.block)
+				body = closureProvider.getInvariantClosure(invariant.expression)
 			]
 		]
 		
-		generatorStatus.addInvariantToInfer(invariant.block)
+		generatorStatus.addInvariantToInfer(invariant.expression)
 	}
 	
 	def setPkName(String pkgName) {
