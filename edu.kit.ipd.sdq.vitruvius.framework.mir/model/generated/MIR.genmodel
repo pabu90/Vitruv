@@ -39,8 +39,13 @@
     </genClasses>
     <genClasses ecoreClass="MIR.ecore#//Invariant">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MIR.ecore#//Invariant/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MIR.ecore#//Invariant/parameters"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MIR.ecore#//Invariant/context"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MIR.ecore#//Invariant/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="MIR.ecore#//InvParam">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MIR.ecore#//InvParam/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MIR.ecore#//InvParam/type"/>
     </genClasses>
     <genClasses ecoreClass="MIR.ecore#//ClassMapping"/>
     <genClasses ecoreClass="MIR.ecore#//FeatureMapping"/>

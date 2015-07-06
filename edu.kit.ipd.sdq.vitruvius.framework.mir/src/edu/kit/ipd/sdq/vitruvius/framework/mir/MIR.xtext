@@ -88,7 +88,19 @@ FeatureCall returns TypedElement:
 ;
 
 Invariant returns Invariant:
-	'invariant' name=ValidID 
+	'invariant' name=ValidID
+	(
+		'('
+			parameters+=InvariantParam
+			(',' parameters+=InvariantParam)*
+		')'
+	)?
 	'context' context=[ecore::EClass|QualifiedName]
 	'check' expression=XExpression
+;
+
+InvariantParam returns InvParam:
+	name=ValidID
+	':'
+	type=[ecore::EClass|QualifiedName]
 ;

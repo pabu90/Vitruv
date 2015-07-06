@@ -12,8 +12,10 @@ public class InvariantInferrer implements InvariantInferrerProviding {
 	@Override
 	public void infer(XExpression expression) {
 		TreeAppendableClosure invariantClosure = closureProvider.getInvariantClosure(expression);
-
+		
 		// analyse expression
+		
+		
 //		if (expression != null)
 //			invariantClosure.addCode("/* Expression */" + expression.toString());
 		
