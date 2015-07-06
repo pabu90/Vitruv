@@ -5,14 +5,10 @@ import edu.kit.ipd.sdq.vitruvius.framework.mir.generator.IGeneratorStatus
 import edu.kit.ipd.sdq.vitruvius.framework.mir.inferrer.ClosureProvider
 import edu.kit.ipd.sdq.vitruvius.framework.mir.mIR.Invariant
 import java.util.List
-import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypeReferenceBuilder
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
-import org.eclipse.xtext.common.types.JvmTypeReference
-import java.util.Map
-import java.util.HashMap
 
 /**
  * Inferrs the Jvm Model for MIR invariants.
@@ -46,6 +42,8 @@ class MIRInvariantJvmModelInferrer {
 		// build DTO
 		acceptor.accept(invariant.toClass(pkgName + "." + invariant.name + "DTO")) [
 			members += invariant.context.toField("context", contextType)
+			members += invariant.context.toSetter("context", contextType)
+			members += invariant.context.toGetter("context", contextType)
 			members.addAll(invariant.parameters.map[it.toField(it.name, typeRef(List, typeRef(it.type.instanceClass)))])
 			members.addAll(invariant.parameters.map[it.toGetter(it.name, typeRef(List, typeRef(it.type.instanceClass)))])
 			members.addAll(invariant.parameters.map[it.toSetter(it.name, typeRef(List, typeRef(it.type.instanceClass)))])
