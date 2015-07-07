@@ -27,14 +27,17 @@ public class MIRGenerator implements IGenerator {
 	private JvmModelGenerator jvmModelGenerator;
 	private MIRIntermediateLanguageGenerator intermediateLanguageGenerator;
 	private MIRCodeGenerator codeGenerator;
+	private MIRInvariantGenerator invariantGenerator;
 	
 	@Inject
 	public MIRGenerator(
 			JvmModelGenerator jvmModelGenerator,
 			MIRIntermediateLanguageGenerator intermediateLanguageGenerator,
-			MIRCodeGenerator codeGenerator) {
+			MIRCodeGenerator codeGenerator,
+			MIRInvariantGenerator invariantGenerator) {
 		
 		this.jvmModelGenerator = jvmModelGenerator;
+		this.invariantGenerator = invariantGenerator;
 		this.intermediateLanguageGenerator = intermediateLanguageGenerator;
 		this.codeGenerator = codeGenerator;
 	}
@@ -49,6 +52,7 @@ public class MIRGenerator implements IGenerator {
 		IFileSystemAccess srcgenFSA = eclipseHelper.getSrcGenFSA();
 		
 		jvmModelGenerator.doGenerate(input, srcgenFSA);
+		invariantGenerator.doGenerate(input, srcgenFSA);
 		intermediateLanguageGenerator.doGenerate(input, srcgenFSA);
 		codeGenerator.doGenerate(input, rootFSA);
 	}

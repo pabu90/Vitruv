@@ -74,16 +74,16 @@ class InvariantInferrer implements InvariantInferrerProviding {
 				target + "." + operation + "(" + param + ")";
 			}
 			XFeatureCall: {
-				if (!(expression.feature instanceof JvmFormalParameter))
-					throw new UnsupportedOperationException()
+//				if (!(expression.feature instanceof JvmFormalParameter))
+//					throw new UnsupportedOperationException()
 				expression.feature.simpleName
 			}
 			XUnaryOperation: {
 				expression.operand.evaluate
 // throw new UnsupportedOperationException()
 			}
-			default:
-				throw new UnsupportedOperationException()
+			default:""
+//				throw new UnsupportedOperationException()
 		}
 	}
 

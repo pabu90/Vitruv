@@ -52,12 +52,12 @@ class MIRInvariantJvmModelInferrer {
 		// build invariant
 		acceptor.accept(invariant.toClass(pkgName + "." + invariant.name)) [
 			members += invariant.toMethod("check", typeRef(Boolean.TYPE)) [
-				parameters += invariant.toParameter("self", contextType)
+				parameters += invariant.toParameter("_self", contextType)
 				body = invariant.expression
 			]
 
 			members += invariant.toMethod("findViolation", typeRef(invariant.name + "DTO")) [
-				parameters += invariant.toParameter("self", contextType)
+				parameters += invariant.toParameter("_self", contextType)
 				body = closureProvider.getInvariantClosure(invariant)
 			]
 		]
