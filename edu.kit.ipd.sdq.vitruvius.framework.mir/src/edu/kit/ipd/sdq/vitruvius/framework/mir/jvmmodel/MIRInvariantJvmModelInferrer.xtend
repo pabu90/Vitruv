@@ -9,6 +9,7 @@ import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypeReferenceBuilder
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
+import edu.kit.ipd.sdq.vitruvius.framework.mir.generator.MIRCodeGenerator
 
 /**
  * Inferrs the Jvm Model for MIR invariants.
@@ -39,26 +40,12 @@ class MIRInvariantJvmModelInferrer {
 
 		val contextType = typeRef(invariant.context.instanceClass)
 
-		// build DTO
-		acceptor.accept(invariant.toClass(pkgName + "." + invariant.name + "DTO")) [
-			members += invariant.context.toField("context", contextType)
-			members += invariant.context.toSetter("context", contextType)
-			members += invariant.context.toGetter("context", contextType)
-			members.addAll(invariant.parameters.map[it.toField(it.name, typeRef(List, typeRef(it.type.instanceClass)))])
-			members.addAll(invariant.parameters.map[it.toGetter(it.name, typeRef(List, typeRef(it.type.instanceClass)))])
-			members.addAll(invariant.parameters.map[it.toSetter(it.name, typeRef(List, typeRef(it.type.instanceClass)))])
-		]
-
 		// build invariant
-		acceptor.accept(invariant.toClass(pkgName + "." + invariant.name)) [
-			members += invariant.toMethod("check", typeRef(Boolean.TYPE)) [
+		acceptor.accept(
+			invariant.toClass(pkgName + "." + MIRCodeGenerator.INV_PKG_NAME + "." + "Inv_" + invariant.name)) [
+			members += invariant.toMethod("expression", typeRef(Boolean.TYPE)) [
 				parameters += invariant.toParameter("_self", contextType)
 				body = invariant.expression
-			]
-
-			members += invariant.toMethod("findViolation", typeRef(invariant.name + "DTO")) [
-				parameters += invariant.toParameter("_self", contextType)
-				body = closureProvider.getInvariantClosure(invariant)
 			]
 		]
 

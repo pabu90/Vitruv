@@ -4,20 +4,24 @@ import edu.kit.ipd.sdq.vitruvius.framework.mir.helpers.MIRHelper
 import edu.kit.ipd.sdq.vitruvius.framework.mir.mIR.Invariant
 import org.eclipse.emf.ecore.EClass
 import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.xtext.common.types.JvmFormalParameter
+import org.eclipse.xtext.common.types.JvmIdentifiableElement
+import org.eclipse.xtext.common.types.JvmOperation
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
+import org.eclipse.xtext.xbase.XBinaryOperation
+import org.eclipse.xtext.xbase.XBlockExpression
 import org.eclipse.xtext.xbase.XClosure
 import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.XFeatureCall
 import org.eclipse.xtext.xbase.XMemberFeatureCall
 import org.eclipse.xtext.xbase.XUnaryOperation
-import org.eclipse.xtext.xbase.compiler.XbaseCompiler
-import org.eclipse.xtext.xbase.XBlockExpression
+import org.eclipse.xtext.xbase.XNumberLiteral
+import org.eclipse.xtext.xbase.XStringLiteral
+import org.eclipse.xtext.xbase.XBooleanLiteral
+import org.eclipse.xtext.xbase.XNullLiteral
+import org.eclipse.xtext.xbase.XIfExpression
 
 class MIRInvariantGenerator implements IGenerator {
-
-	private static final String INVARIANT_PKG_NAME = "invariants";
 
 	private static final char PATH_SEPERATOR = '/';
 
@@ -43,7 +47,7 @@ class MIRInvariantGenerator implements IGenerator {
 
 	override doGenerate(Resource input, IFileSystemAccess fsa) {
 		val mir = MIRHelper.getMIR(input)
-		val pkgName = (mir.generatedPackage + "." + INVARIANT_PKG_NAME)
+		val pkgName = (mir.generatedPackage + "." + MIRCodeGenerator.INV_PKG_NAME)
 
 		// generate Invs
 		mir.invariants.forEach [
@@ -121,24 +125,56 @@ class MIRInvariantGenerator implements IGenerator {
 		'''
 	}
 
+	private def String featureName(JvmIdentifiableElement feature) {
+		switch (feature) {
+			JvmOperation:
+				if (feature.simpleName == "operator_not")
+					"!"
+				else if (feature.simpleName == "operator_equals")
+					" == "
+				else if (feature.simpleName == "operator_notEquals")
+					" != "
+				else if (feature.simpleName == "operator_lessThan")
+					" < "
+				else if (feature.simpleName == "operator_lessEqualsThan")
+					" <= "
+				else if (feature.simpleName == "operator_greaterThan")
+					" > "
+				else if (feature.simpleName == "operator_greaterEqualsThan")
+					" >= "
+				else if (feature.simpleName == "operator_and")
+					" && "
+				else if (feature.simpleName == "operator_or")
+					" || "
+				else
+					feature.simpleName
+			default:
+				feature.simpleName
+		}
+	}
+
 	private def dispatch String toXtend(XUnaryOperation expression) {
 		if (expression.feature.simpleName != "operator_not")
 			throw new IllegalArgumentException("Unsuited operation for invariants")
 		"!" + expression.operand.toXtend
 	}
 
+	private def dispatch String toXtend(XBinaryOperation expression) {
+		expression.leftOperand.toXtend + expression.feature.featureName + expression.rightOperand.toXtend
+	}
+
 	private def dispatch String toXtend(XMemberFeatureCall expression) {
 		val param = new StringBuilder();
 		expression.memberCallArguments.forEach[param.append(it.toXtend)]
 
-		expression.memberCallTarget.toXtend + "." + expression.feature.simpleName + "(" + param.toString + ")"
+		expression.memberCallTarget.toXtend + "." + expression.feature.featureName + "(" + param.toString + ")"
 	}
 
 	private def dispatch String toXtend(XFeatureCall expression) {
 		val param = new StringBuilder();
 		expression.featureCallArguments.forEach[param.append(it.toXtend)]
 
-		expression.feature.simpleName + param.toString
+		expression.feature.featureName + param.toString
 	}
 
 	private def dispatch String toXtend(XClosure expression) {
@@ -155,6 +191,22 @@ class MIRInvariantGenerator implements IGenerator {
 		expression.expressions.get(0).toXtend
 	}
 
+	private def dispatch String toXtend(XNullLiteral expression) {
+		"null"
+	}
+
+	private def dispatch String toXtend(XBooleanLiteral expression) {
+		if(expression.isIsTrue) "true" else "false"
+	}
+
+	private def dispatch String toXtend(XStringLiteral expression) {
+		"\"" + expression.value + "\""
+	}
+
+	private def dispatch String toXtend(XNumberLiteral expression) {
+		expression.value
+	}
+
 	private def dispatch String toXtend(XExpression expression) {
 		throw new IllegalArgumentException("Unsuited operation for invariants")
 	}
@@ -164,31 +216,6 @@ class MIRInvariantGenerator implements IGenerator {
 			XUnaryOperation: expression.operand
 			// throw new UnsupportedOperationException()
 			default: expression
-		}
-	}
-
-	private def String evaluate(XExpression expression) {
-		switch (expression) {
-			XMemberFeatureCall: {
-				var target = expression.memberCallTarget.evaluate
-				var operation = expression.feature.simpleName
-				var param = if (expression.feature.simpleName.startsWith("get"))
-						""
-					else
-						(expression.memberCallArguments.get(0) as XClosure).toString
-				target + "." + operation + "(" + param + ")";
-			}
-			XFeatureCall: {
-				if (!(expression.feature instanceof JvmFormalParameter))
-					throw new UnsupportedOperationException()
-				expression.feature.simpleName
-			}
-			XUnaryOperation: {
-				expression.operand.evaluate
-// throw new UnsupportedOperationException()
-			}
-			default:
-				throw new UnsupportedOperationException()
 		}
 	}
 

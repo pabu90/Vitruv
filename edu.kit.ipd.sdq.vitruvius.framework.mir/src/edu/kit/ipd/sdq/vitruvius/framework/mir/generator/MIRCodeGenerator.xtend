@@ -47,6 +47,7 @@ import org.apache.log4j.Logger
 class MIRCodeGenerator implements IGenerator {
 	private static final String SRC_GEN_FOLDER = "src-gen/";
 	private static final String MAPPING_PKG_NAME = "mappings";
+	public static final String INV_PKG_NAME = "invariants";
 	private static final String LOGGER_NAME = "LOGGER";
 	
 	@Inject IGeneratorStatus generatorStatus;
@@ -74,7 +75,8 @@ class MIRCodeGenerator implements IGenerator {
 		MIRPluginProjectCreator.createManifest(fsa, projectName,
 			mirFile.bundles.map[bundleFQN],
 			#[il.configuration.package,
-			  il.configuration.package.mappingPackageName]
+			  il.configuration.package.mappingPackageName,
+			  mirFile.generatedPackage.invariantsPackageName]
 		)
 		
 		for (mapping : il.classMappings) {
@@ -290,6 +292,10 @@ class MIRCodeGenerator implements IGenerator {
 	
 	def String mappingPackageName(String rootPkgName) {
 		rootPkgName + "." + MAPPING_PKG_NAME
+	}
+	
+	def String invariantsPackageName(String rootPkgName) {
+		rootPkgName + "." + INV_PKG_NAME
 	}
 	
 	def String checkWhenWhereJava(WhenWhereJavaClass predicate) {

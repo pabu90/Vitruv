@@ -21,7 +21,9 @@ class MIRJvmModelGenerator extends JvmModelGenerator {
 		
 		generatorStatus.whenWheresToInfer.forEach [ whenWhereInferrer.inferBlock(it) ]
 		generatorStatus.withBlocksToInfer.forEach [ withBlockInferrer.infer(it) ]
-		generatorStatus.invariantsToInfer.forEach [ invariantInferrer.infer(it) ]
+		
+		// INVARIANT JVM MODEL
+		//generatorStatus.invariantsToInfer.forEach [ invariantInferrer.infer(it) ]
 		
 		super.doGenerate(input, fsa)
 	}
