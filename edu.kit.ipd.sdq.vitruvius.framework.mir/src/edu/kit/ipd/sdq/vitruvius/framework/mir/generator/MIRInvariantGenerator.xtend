@@ -10,16 +10,17 @@ import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.xbase.XBinaryOperation
 import org.eclipse.xtext.xbase.XBlockExpression
+import org.eclipse.xtext.xbase.XBooleanLiteral
 import org.eclipse.xtext.xbase.XClosure
 import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.XFeatureCall
 import org.eclipse.xtext.xbase.XMemberFeatureCall
-import org.eclipse.xtext.xbase.XUnaryOperation
+import org.eclipse.xtext.xbase.XNullLiteral
 import org.eclipse.xtext.xbase.XNumberLiteral
 import org.eclipse.xtext.xbase.XStringLiteral
-import org.eclipse.xtext.xbase.XBooleanLiteral
-import org.eclipse.xtext.xbase.XNullLiteral
-import org.eclipse.xtext.xbase.XIfExpression
+import org.eclipse.xtext.xbase.XUnaryOperation
+import org.eclipse.xtext.xbase.XReturnExpression
+import org.eclipse.xtext.xbase.impl.XReturnExpressionImpl
 
 class MIRInvariantGenerator implements IGenerator {
 
@@ -31,10 +32,6 @@ class MIRInvariantGenerator implements IGenerator {
 
 	private def type(EClass clazz) {
 		clazz.instanceClass.simpleName
-	}
-
-	private def pkg(EClass clazz) {
-		clazz.instanceClass.package.name
 	}
 
 	private def imprt(EClass clazz) {
@@ -211,12 +208,9 @@ class MIRInvariantGenerator implements IGenerator {
 		throw new IllegalArgumentException("Unsuited operation for invariants")
 	}
 
-	private def XExpression transform(XExpression expression, String param) {
-		switch (expression) {
-			XUnaryOperation: expression.operand
-			// throw new UnsupportedOperationException()
-			default: expression
-		}
+	public static def XExpression transform(XExpression expression, String param) {
+		//TODO: switch expression, return transformed
+		expression
 	}
 
 }

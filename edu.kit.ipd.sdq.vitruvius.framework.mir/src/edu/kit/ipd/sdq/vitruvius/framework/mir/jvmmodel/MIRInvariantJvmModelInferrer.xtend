@@ -2,14 +2,15 @@ package edu.kit.ipd.sdq.vitruvius.framework.mir.jvmmodel
 
 import com.google.inject.Inject
 import edu.kit.ipd.sdq.vitruvius.framework.mir.generator.IGeneratorStatus
+import edu.kit.ipd.sdq.vitruvius.framework.mir.generator.MIRCodeGenerator
 import edu.kit.ipd.sdq.vitruvius.framework.mir.inferrer.ClosureProvider
 import edu.kit.ipd.sdq.vitruvius.framework.mir.mIR.Invariant
-import java.util.List
 import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypeReferenceBuilder
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
-import edu.kit.ipd.sdq.vitruvius.framework.mir.generator.MIRCodeGenerator
+import static extension edu.kit.ipd.sdq.vitruvius.framework.mir.generator.MIRInvariantGenerator.transform
+import java.util.List
 
 /**
  * Inferrs the Jvm Model for MIR invariants.
@@ -40,16 +41,27 @@ class MIRInvariantJvmModelInferrer {
 
 		val contextType = typeRef(invariant.context.instanceClass)
 
+		// current problem: acceptor consumes expression within body, so it will be null afterwards
+		val expression = invariant.expression
+
 		// build invariant
 		acceptor.accept(
-			invariant.toClass(pkgName + "." + MIRCodeGenerator.INV_PKG_NAME + "." + "Inv_" + invariant.name)) [
+			invariant.toClass(pkgName + "." + MIRCodeGenerator.INV_PKG_NAME + "." + "jvmModel." + invariant.name)) [
 			members += invariant.toMethod("expression", typeRef(Boolean.TYPE)) [
-				parameters += invariant.toParameter("_self", contextType)
+				parameters += invariant.context.toParameter("_self", contextType)
 				body = invariant.expression
+			]
+
+			members += invariant.parameters.map [ param |
+				invariant.toMethod(param.name, typeRef(List, typeRef(param.type.instanceClass))) [
+					parameters += invariant.context.toParameter("_self", contextType)
+					var exp = expression.transform(param.name)
+					body = closureProvider.getInvariantClosure(exp)
+					generatorStatus.addInvariantToInfer(exp)
+				]
 			]
 		]
 
-		generatorStatus.addInvariantToInfer(invariant)
 	}
 
 	def setPkName(String pkgName) {

@@ -1,7 +1,7 @@
 package edu.kit.ipd.sdq.vitruvius.framework.mir.inferrer
 
 import com.google.inject.Inject
-import edu.kit.ipd.sdq.vitruvius.framework.mir.mIR.Invariant
+import org.eclipse.xtext.xbase.XExpression
 
 class InvariantInferrer implements InvariantInferrerProviding {
 	/** 
@@ -9,9 +9,10 @@ class InvariantInferrer implements InvariantInferrerProviding {
 	 */
 	@Inject ClosureProvider closureProvider
 
-	override void infer(Invariant inv) {
+	override void infer(XExpression inv) {
 		var TreeAppendableClosure invariantClosure = closureProvider.getInvariantClosure(inv)
 
+		invariantClosure.addXExpression(inv)
 	}
 
 }

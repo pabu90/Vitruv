@@ -13,7 +13,7 @@ import edu.kit.ipd.sdq.vitruvius.framework.mir.mIR.Invariant
 class ClosureProvider {
 	private Map<XExpression, Map<EPackage, TreeAppendableClosure>> assignmentClosures
 	private Map<XExpression, Map<EPackage, TreeAppendableClosure>> equalityClosures
-	private Map<Invariant, TreeAppendableClosure> invariantClosures
+	private Map<XExpression, TreeAppendableClosure> invariantClosures
 	
 	@Inject Provider<TreeAppendableClosure> closureProvider
 	@Inject Provider<TreeAppendableConjunctionClosure> conjunctionClosureProvider
@@ -81,7 +81,7 @@ class ClosureProvider {
 	/**
 	 * Returns the invariant closure for the given XExpression.
 	 */
-	public def TreeAppendableClosure getInvariantClosure(Invariant inv) {
+	public def TreeAppendableClosure getInvariantClosure(XExpression inv) {
 		if (!invariantClosures.containsKey(inv))
 			invariantClosures.put(inv, closureProvider.get())
 			
