@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ocl2xocl4inv
+Bundle-SymbolicName: edu.kit.ipd.sdq.ocl2xocl4inv;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: sdq
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.xtext.generator,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ edu.kit.ipd.sdq.vitruvius.framework.util,
+ org.eclipse.xtext,
+ edu.kit.ipd.sdq.commons.ecore2txt
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

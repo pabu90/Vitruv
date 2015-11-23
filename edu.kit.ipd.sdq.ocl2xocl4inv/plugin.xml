@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+  <extension
+        point="org.eclipse.ui.commands">
+     <command
+           defaultHandler="edu.kit.ipd.sdq.ocl2xocl4inv.handlers.Ocl2Xocl4InvGeneratorHandler"
+           id="edu.kit.ipd.sdq.ocl2xocl4inv.commands.createxocl"
+           name="Create XOCL invariants">
+     </command>
+  </extension>
+  <extension
+        point="org.eclipse.ui.menus">
+     <menuContribution
+           allPopups="false"
+           locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+        <menu
+              id="createxoclmenu"
+              label="XOCL">
+           <command
+                 commandId="edu.kit.ipd.sdq.ocl2xocl4inv.commands.createxocl"
+                 label="Create XOCL invariants"
+                 style="push"
+                 tooltip="Create XOCL invariants from your OCL Invariants in your ECore Model">
+           </command>
+           <visibleWhen
+                 checkEnabled="false">
+              <with
+                    variable="activeMenuSelection">
+                 <iterate>
+                 <adapt type="org.eclipse.core.resources.IResource">
+             <or>
+                <test
+                      property="org.eclipse.core.resources.name"
+                      value="*.ecore">
+                </test>
+                <test
+                      property="org.eclipse.core.resources.name"
+                      value="*.ecore">  <!--TODO: allow .ocl files?-->
+                </test>
+             </or>
+                 </adapt>
+                 </iterate>
+              </with>
+           </visibleWhen>
+        </menu>
+     </menuContribution>
+  </extension>
+
+</plugin>
