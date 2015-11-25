@@ -20,7 +20,7 @@
               label="XOCL">
            <command
                  commandId="edu.kit.ipd.sdq.ocl2xocl4inv.commands.createxocl"
-                 label="Create XOCL invariants"
+                 label="Create XOCL invariants..."
                  style="push"
                  tooltip="Create XOCL invariants from your OCL Invariants in your ECore Model">
            </command>

@@ -15,6 +15,6 @@ public class Ocl2Xocl4InvGeneratorHandler extends AbstractEcore2TxtHandler {
 		Ocl2Xocl4InvGeneratorModule generatorModule = new Ocl2Xocl4InvGeneratorModule();
 		Ocl2Xocl4InvGenerator generator = new Ocl2Xocl4InvGenerator();
 		
-		Ecore2TxtUtil.generateFromSelectedFilesInFolder(files, generatorModule, generator,"src-gen");
+		Ecore2TxtUtil.generateFromSelectedFilesInFolder(files, generatorModule, generator, "src-gen");
 	}
 }
