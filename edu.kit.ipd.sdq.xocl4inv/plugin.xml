@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package 
+       uri = "http://sdq.ipd.kit.edu/xocl4inv/dsl/XOcl4Inv" 
+       class = "edu.kit.ipd.sdq.xocl4inv.dsl.XOcl4InvPackage"
+       genModel = "model/generated/XOcl4Inv.genmodel" /> 
+	
+  </extension>
+
+
+
+
+</plugin>
