@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/edu.kit.ipd.sdq.xocl4inv.eval.model/src" editDirectory="/edu.kit.ipd.sdq.xocl4inv.eval.model.edit/src"
+    editorDirectory="/edu.kit.ipd.sdq.xocl4inv.eval.model.editor/src" modelPluginID="edu.kit.ipd.sdq.xocl4inv.eval.model"
+    templateDirectory="" modelName="Model" editPluginClass="edu.kit.ipd.sdq.xocl4inv.eval.model.provider.ModelEditPlugin"
+    editorPluginClass="edu.kit.ipd.sdq.xocl4inv.eval.model.presentation.ModelEditorPlugin"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testSuiteClass="edu.kit.ipd.sdq.xocl4inv.eval.model.tests.ModelAllTests"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" editPluginID="edu.kit.ipd.sdq.xocl4inv.eval.model.edit"
+    editorPluginID="edu.kit.ipd.sdq.xocl4inv.eval.model.editor" language="" importOrganizing="true">
+  <foreignModel>Model.ecore</foreignModel>
+  <genPackages prefix="Model" disposableProviderFactory="true" ecorePackage="Model.ecore#/">
+    <nestedGenPackages prefix="Kit" disposableProviderFactory="true" ecorePackage="Model.ecore#//kit">
+      <nestedGenPackages prefix="Ipd" disposableProviderFactory="true" ecorePackage="Model.ecore#//kit/ipd">
+        <nestedGenPackages prefix="Sdq" disposableProviderFactory="true" ecorePackage="Model.ecore#//kit/ipd/sdq">
+          <nestedGenPackages prefix="Xocl4inv" disposableProviderFactory="true" ecorePackage="Model.ecore#//kit/ipd/sdq/xocl4inv">
+            <nestedGenPackages prefix="Eval" disposableProviderFactory="true" ecorePackage="Model.ecore#//kit/ipd/sdq/xocl4inv/eval">
+              <nestedGenPackages prefix="Model" disposableProviderFactory="true" ecorePackage="Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model">
+                <genClasses ecoreClass="Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Library">
+                  <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Library/name"/>
+                  <genFeatures property="None" children="true" createChild="true"
+                      ecoreFeature="ecore:EReference Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Library/books"/>
+                  <genFeatures property="None" children="true" createChild="true"
+                      ecoreFeature="ecore:EReference Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Library/loans"/>
+                  <genFeatures property="None" children="true" createChild="true"
+                      ecoreFeature="ecore:EReference Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Library/members"/>
+                </genClasses>
+                <genClasses ecoreClass="Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Book">
+                  <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Book/name"/>
+                  <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Book/copies"/>
+                  <genFeatures property="None" notify="false" createChild="false"
+                      ecoreFeature="ecore:EReference Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Book/library"/>
+                  <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                      ecoreFeature="ecore:EReference Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Book/loans"/>
+                  <genOperations ecoreOperation="Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Book/isAvailable"/>
+                </genClasses>
+                <genClasses ecoreClass="Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Member">
+                  <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Member/name"/>
+                  <genFeatures property="None" notify="false" createChild="false"
+                      ecoreFeature="ecore:EReference Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Member/library"/>
+                  <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                      ecoreFeature="ecore:EReference Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Member/loans"/>
+                  <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                      ecoreFeature="ecore:EReference Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Member/books"/>
+                </genClasses>
+                <genClasses ecoreClass="Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Loan">
+                  <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                      ecoreFeature="ecore:EReference Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Loan/book"/>
+                  <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                      ecoreFeature="ecore:EReference Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Loan/member"/>
+                  <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Model.ecore#//kit/ipd/sdq/xocl4inv/eval/model/Loan/weeks"/>
+                </genClasses>
+              </nestedGenPackages>
+            </nestedGenPackages>
+          </nestedGenPackages>
+        </nestedGenPackages>
+      </nestedGenPackages>
+    </nestedGenPackages>
+  </genPackages>
+</genmodel:GenModel>

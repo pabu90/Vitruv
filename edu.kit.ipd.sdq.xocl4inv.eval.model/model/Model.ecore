@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="edu" nsURI="http://edu" nsPrefix="edu">
+  <eAnnotations source="http://www.eclipse.org/OCL/Import">
+    <details key="ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
+  <eSubpackages name="kit" nsURI="http://kit.edu" nsPrefix="kit">
+    <eSubpackages name="ipd" nsURI="http://ipd.kit.edu" nsPrefix="ipd">
+      <eSubpackages name="sdq" nsURI="http://sdq.ipd.kit.edu" nsPrefix="sdq">
+        <eSubpackages name="xocl4inv" nsURI="http://sdq.ipd.kit.edu/xocl4inv" nsPrefix="xocl4inv">
+          <eSubpackages name="eval" nsURI="http://sdq.ipd.kit.edu/xocl4inv/eval" nsPrefix="eval">
+            <eSubpackages name="model" nsURI="http://sdq.ipd.kit.edu/xocl4inv/eval/model"
+                nsPrefix="model">
+              <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+                <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+                <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+                <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+              </eAnnotations>
+              <eClassifiers xsi:type="ecore:EClass" name="Library">
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+                    eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1"
+                    eType="#//kit/ipd/sdq/xocl4inv/eval/model/Book" containment="true"
+                    eOpposite="#//kit/ipd/sdq/xocl4inv/eval/model/Book/library"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1"
+                    eType="#//kit/ipd/sdq/xocl4inv/eval/model/Loan" containment="true"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+                    eType="#//kit/ipd/sdq/xocl4inv/eval/model/Member" containment="true"
+                    eOpposite="#//kit/ipd/sdq/xocl4inv/eval/model/Member/library"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="Book">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+                  <details key="constraints" value="SufficientCopies"/>
+                </eAnnotations>
+                <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+                  <details key="SufficientCopies" value="library.loans->select((book = self))->size() &lt;= copies"/>
+                </eAnnotations>
+                <eOperations name="isAvailable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+                  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+                    <details key="body" value="loans->size() &lt; copies"/>
+                  </eAnnotations>
+                </eOperations>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+                    eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies" lowerBound="1"
+                    eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="library" eType="#//kit/ipd/sdq/xocl4inv/eval/model/Library"
+                    eOpposite="#//kit/ipd/sdq/xocl4inv/eval/model/Library/books"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1"
+                    eType="#//kit/ipd/sdq/xocl4inv/eval/model/Loan" volatile="true"
+                    derived="true">
+                  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+                    <details key="derivation" value="library.loans->select(book = self)"/>
+                  </eAnnotations>
+                </eStructuralFeatures>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="Member">
+                <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+                  <details key="constraints" value="AtMostTwoLoans UniqueLoans"/>
+                </eAnnotations>
+                <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+                  <details key="AtMostTwoLoans" value="loans->size() &lt;= 2"/>
+                  <details key="UniqueLoans" value="loans->isUnique(book)"/>
+                </eAnnotations>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+                    eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="library" eType="#//kit/ipd/sdq/xocl4inv/eval/model/Library"
+                    eOpposite="#//kit/ipd/sdq/xocl4inv/eval/model/Library/members"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1"
+                    eType="#//kit/ipd/sdq/xocl4inv/eval/model/Loan" volatile="true"
+                    derived="true">
+                  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+                    <details key="derivation" value="library.loans->select(member = self)"/>
+                  </eAnnotations>
+                </eStructuralFeatures>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="books" unique="false"
+                    upperBound="-1" eType="#//kit/ipd/sdq/xocl4inv/eval/model/Book"
+                    volatile="true" derived="true">
+                  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+                    <details key="derivation" value="loans->collect(book)"/>
+                  </eAnnotations>
+                </eStructuralFeatures>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="Loan">
+                <eStructuralFeatures xsi:type="ecore:EReference" name="book" lowerBound="1"
+                    eType="#//kit/ipd/sdq/xocl4inv/eval/model/Book"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="member" lowerBound="1"
+                    eType="#//kit/ipd/sdq/xocl4inv/eval/model/Member"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="weeks" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              </eClassifiers>
+            </eSubpackages>
+          </eSubpackages>
+        </eSubpackages>
+      </eSubpackages>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>
