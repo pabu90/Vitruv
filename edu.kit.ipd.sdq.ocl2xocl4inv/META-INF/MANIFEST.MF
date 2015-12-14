@@ -10,8 +10,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  edu.kit.ipd.sdq.vitruvius.framework.util,
  org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.xtext.xbase.lib,
  org.eclipse.ocl,
  edu.kit.ipd.sdq.commons.ecore2txt,
  org.eclipse.ocl.ecore,
- org.eclipse.emf.ecore
+ org.eclipse.emf.ecore,
+ edu.kit.ipd.sdq.xocl4inv
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
