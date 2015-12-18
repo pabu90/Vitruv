@@ -1,0 +1,1359 @@
+import "http://sdq.ipd.kit.edu/xocl4inv/eval/model" as mdl
+
+// Basics
+//invariant simpleForall (sfmodel.Book b)
+//context sfmodel.Library
+//check _self.books.forall[b|b.available]
+
+transform transform_simpleForall_violated
+invariant simpleForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build
+	]
+}
+
+transform transform_simpleForall_violated_2
+invariant simpleForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 1", 1)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build
+	]
+}
+
+transform transform_simpleForall_empty
+invariant simpleForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_simpleForall_true
+invariant simpleForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 1", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant simpleExists (sfmodel.Book b)
+//context sfmodel.Library
+//check _self.books.exists[b|b.available]
+
+transform transform_simpleExists_violated
+invariant simpleExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build
+	]
+}
+
+transform transform_simpleExists_violated_2
+invariant simpleExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 1", 1)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build
+	]
+}
+
+transform transform_simpleExists_empty
+invariant simpleExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_simpleExists_true
+invariant simpleExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 1", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant mapForall (sfmodel.Book b)
+//context sfmodel.Library
+//check _self.books.map[b|b.copies].forall[c|c>5]
+
+transform transform_mapForall_violated
+invariant mapForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build
+	]
+}
+
+transform transform_mapForall_violated_2
+invariant mapForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build
+	]
+}
+
+transform transform_mapForall_empty
+invariant mapForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_mapForall_true
+invariant mapForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 7).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant selectForall (sfmodel.Book b)
+//context sfmodel.Library
+//check _self.books.select[b|b.available].forall[c|c.copies > 5]
+
+transform transform_selectForall_violated
+invariant selectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build
+	]
+}
+
+transform transform_selectForall_violated_2
+invariant selectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build
+	]
+}
+
+transform transform_selectForall_violated_3
+invariant selectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 3).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 3).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 1", 123)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 3).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 3).build
+	]
+}
+
+transform transform_selectForall_empty
+invariant selectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_selectForall_true
+invariant selectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 7).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 1", 123)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_selectForall_true_2
+invariant selectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant mapExists (sfmodel.Book b)
+//context sfmodel.Library
+//check _self.books.map[b|b.copies].exists[c|c>5]
+
+transform transform_mapExists_violated
+invariant mapExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 5).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 5).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build
+	]
+}
+
+transform transform_mapExists_violated_2
+invariant mapExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build
+	]
+}
+
+transform transform_mapExists_empty
+invariant mapExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_mapExists_true
+invariant mapExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 7).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_mapExists_true_2
+invariant mapExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant selectExists (sfmodel.Book b)
+//context sfmodel.Library
+//check _self.books.select[b|b.available].exists[c|c.copies > 5]
+
+transform transform_selectExists_violated
+invariant selectExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build
+	]
+}
+
+transform transform_selectExists_violated_2
+invariant selectExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build
+	]
+}
+
+transform transform_selectExists_violated_3
+invariant selectExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 4).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 3").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 4").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 5").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 6").build)
+	.addLoan("Member 1", "Book 2", 123)
+	.addLoan("Member 2", "Book 2", 123)
+	.addLoan("Member 3", "Book 2", 123)
+	.addLoan("Member 4", "Book 2", 123)
+	.addLoan("Member 5", "Book 2", 123)
+	.addLoan("Member 6", "Book 2", 123)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 3).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 4).build
+	]
+}
+
+transform transform_selectExists_empty
+invariant selectExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_selectExists_true
+invariant selectExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 4).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_selectExists_true_2
+invariant selectExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant simpleOr (sfmodel.Book b)
+//context sfmodel.Library
+//check _self.books.size == 1 || _self.books.forall[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available]
+
+transform transform_simpleOr_violated
+invariant simpleOr
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.build
+}
+output {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build
+	]
+}
+
+transform transform_simpleOr_empty
+invariant simpleOr
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_simpleOr_true
+invariant simpleOr
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_simpleOr_true_2
+invariant simpleOr
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant simpleAnd (sfmodel.Book b)
+//context sfmodel.Library
+//check !_self.books.empty && _self.books.forall[b|b.available]
+
+// tested in forall: left hand side ignored
+
+// Negation
+//invariant notsimpleForall (sfmodel.Book b)
+//context sfmodel.Library
+//check !_self.books.forall[b|b.available]
+
+transform transform_notsimpleForall_violated
+invariant notsimpleForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build
+	]
+}
+
+transform transform_notsimpleForall_empty
+invariant notsimpleForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notsimpleForall_true
+invariant notsimpleForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notsimpleForall_true_2
+invariant notsimpleForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 1", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant notsimpleExists (sfmodel.Book b)
+//context sfmodel.Library
+//check !_self.books.exists[b|b.available]
+
+transform transform_notsimpleExists_violated
+invariant notsimpleExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build
+	]
+}
+
+transform transform_notsimpleExists_violated_2
+invariant notsimpleExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 2", 1)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 4).build
+	]
+}
+
+transform transform_notsimpleExists_empty
+invariant notsimpleExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notsimpleExists_true
+invariant notsimpleExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notsimpleExists_true_2
+invariant notsimpleExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 1", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant notmapForall (sfmodel.Book b)
+//context sfmodel.Library
+//check !_self.books.map[b|b.copies].forall[c|c>5]
+
+transform transform_notmapForall_violated
+invariant notmapForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 7).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 6).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 7).build
+	]
+}
+
+transform transform_notmapForall_empty
+invariant notmapForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notmapForall_true
+invariant notmapForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 8).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notmapForall_true_2
+invariant notmapForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant notselectForall (sfmodel.Book b)
+//context sfmodel.Library
+//check !_self.books.select[b|b.available].forall[c|c.copies > 5]
+
+transform transform_notselectForall_violated
+invariant notselectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build
+	]
+}
+
+transform transform_notselectForall_violated_2
+invariant notselectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 6).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 2", 1)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 6).build
+	]
+}
+
+transform transform_notselectForall_violated_3
+invariant notselectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 0).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 2", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notselectForall_violated_4
+invariant notselectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 7).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 3").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 4").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 5").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 6").build)
+	.addLoan("Member 1", "Book 1", 1)
+	.addLoan("Member 2", "Book 1", 1)
+	.addLoan("Member 3", "Book 1", 1)
+	.addLoan("Member 4", "Book 1", 1)
+	.addLoan("Member 5", "Book 1", 1)
+	.addLoan("Member 6", "Book 1", 1)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 7).build
+	]
+}
+
+transform transform_notselectForall_empty
+invariant notselectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notselectForall_true
+invariant notselectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notselectForall_true_2
+invariant notselectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 3").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 4").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 5").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 6").build)
+	.addLoan("Member 1", "Book 1", 1)
+	.addLoan("Member 2", "Book 1", 1)
+	.addLoan("Member 3", "Book 1", 1)
+	.addLoan("Member 4", "Book 1", 1)
+	.addLoan("Member 5", "Book 1", 1)
+	.addLoan("Member 6", "Book 1", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notselectForall_true_3
+invariant notselectForall
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 3").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 4").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 5").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 6").build)
+	.addLoan("Member 1", "Book 1", 1)
+	.addLoan("Member 2", "Book 1", 1)
+	.addLoan("Member 3", "Book 1", 1)
+	.addLoan("Member 4", "Book 1", 1)
+	.addLoan("Member 5", "Book 1", 1)
+	.addLoan("Member 6", "Book 1", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant notmapExists (sfmodel.Book b)
+//context sfmodel.Library
+//check !_self.books.map[b|b.copies].exists[c|c>5]
+
+transform transform_notmapExists_violated
+invariant notmapExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build
+	]
+}
+
+transform transform_notmapExists_violated_2
+invariant notmapExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 7).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 7).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 1", 1)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 7).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 7).build
+	]
+}
+
+transform transform_notmapExists_empty
+invariant notmapExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notmapExists_true
+invariant notmapExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addLoan("Member 1", "Book 1", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant notselectExists (sfmodel.Book b)
+//context sfmodel.Library
+//check !_self.books.select[b|b.available].exists[c|c.copies > 5]
+
+transform transform_notselectExists_violated
+invariant notselectExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build
+	]
+}
+
+transform transform_notselectExists_violated_2
+invariant notselectExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 6).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 3").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 4").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 5").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 6").build)
+	.addLoan("Member 1", "Book 1", 1)
+	.addLoan("Member 2", "Book 1", 1)
+	.addLoan("Member 3", "Book 1", 1)
+	.addLoan("Member 4", "Book 1", 1)
+	.addLoan("Member 5", "Book 1", 1)
+	.addLoan("Member 6", "Book 1", 1)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 6).build
+	]
+}
+
+transform transform_notselectExists_violated_3
+invariant notselectExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 6).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 6).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 6).build
+	]
+}
+
+transform transform_notselectExists_empty
+invariant notselectExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notselectExists_true
+invariant notselectExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_notselectExists_true_2
+invariant notselectExists
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 3).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 6).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 3").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 4").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 5").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 6").build)
+	.addLoan("Member 1", "Book 2", 1)
+	.addLoan("Member 2", "Book 2", 1)
+	.addLoan("Member 3", "Book 2", 1)
+	.addLoan("Member 4", "Book 2", 1)
+	.addLoan("Member 5", "Book 2", 1)
+	.addLoan("Member 6", "Book 2", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant notsimpleOr (sfmodel.Book b)
+//context sfmodel.Library
+//check !(!_self.books.empty || _self.books.forall[b|b.available])
+
+// checked with And
+
+//invariant notsimpleAnd (sfmodel.Book b)
+//context sfmodel.Library
+//check !(_self.books.empty && _self.books.forall[b|b.available])
+
+// checked with Or
+
+// Deep nested
+//invariant binaryNested (sfmodel.Book b)
+//context sfmodel.Library
+//check (!_self.books.empty && (_self.books.forall[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available] 
+//	|| _self.books.exists[a|a.copies > 2]))	|| _self.books.size > 3
+transform transform_multipleBinary_violated
+invariant binaryNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 0).build
+	]
+}
+
+transform transform_multipleBinary_violated_2
+invariant binaryNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 0).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addLoan("Member 1", "Book 2", 1)
+	.addLoan("Member 2", "Book 2", 1)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 0).build
+	]
+}
+
+transform transform_multipleBinary_empty
+invariant binaryNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_multipleBinary_true
+invariant binaryNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 0).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 4", 0).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addLoan("Member 1", "Book 2", 1)
+	.addLoan("Member 2", "Book 2", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_multipleBinary_true_2
+invariant binaryNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 3).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 0).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addLoan("Member 1", "Book 2", 1)
+	.addLoan("Member 2", "Book 2", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_multipleBinary_true_3
+invariant binaryNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 3).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 0).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 3").build)
+	.addLoan("Member 1", "Book 2", 1)
+	.addLoan("Member 2", "Book 2", 1)
+	.addLoan("Member 3", "Book 2", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant forallNested (sfmodel.Book b)
+//context sfmodel.Library
+//check _self.books.size > 2 || _self.books.forall[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available]
+transform transform_forAllNested_violated
+invariant forallNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 0).build
+	]
+}
+
+transform transform_forAllNested_violated_2
+invariant forallNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addLoan("Member 1", "Book 2", 1)
+	.addLoan("Member 2", "Book 2", 1)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build
+	]
+}
+
+transform transform_forAllNested_empty
+invariant forallNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_forAllNested_true
+invariant forallNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 0).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addLoan("Member 1", "Book 2", 1)
+	.addLoan("Member 2", "Book 2", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_forAllNested_true_2
+invariant forallNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 3).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+	.build
+}
+output {
+	#[
+	]
+}
+
+//invariant existsNested (sfmodel.Book b)
+//context sfmodel.Library
+//check _self.books.size > 2 || _self.books.exists[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available]
+transform transform_existsNested_violated
+invariant existsNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build
+	]
+}
+
+transform transform_existsNested_violated_2
+invariant existsNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addLoan("Member 1", "Book 2", 1)
+	.addLoan("Member 2", "Book 2", 1)
+	.build
+}
+output {
+	#[
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build,
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build
+	]
+}
+
+transform transform_existsNested_empty
+invariant existsNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_existsNested_true
+invariant existsNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 0).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 0).build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+	.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+	.addLoan("Member 1", "Book 2", 1)
+	.addLoan("Member 2", "Book 2", 1)
+	.build
+}
+output {
+	#[
+	]
+}
+
+transform transform_existsNested_true_2
+invariant existsNested
+param "b"
+input {
+	new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Lib")
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 3).build)
+	.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+	.build
+}
+output {
+	#[
+	]
+}

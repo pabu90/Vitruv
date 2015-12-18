@@ -1,0 +1,259 @@
+import "http://sdq.ipd.kit.edu/xocl4inv/eval/model" as mdl
+
+/* Iterate operations  */
+xbaseocl Collection_forAll_extension
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Single")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("True")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("False")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build
+	]
+}
+xbase _self.books.forAll[b1, b2|b1.name != b2.name]
+ocl "self.books->forAll(b1,b2|b1.name <> b2.name)"
+
+xbaseocl Collection_unique
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Single")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("True")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("False")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 2).build)
+		.build
+	]
+}
+xbase {
+	var unique = [Iterable<edu.kit.ipd.sdq.xocl4inv.eval.model.Book> target, Functions.Function1<edu.kit.ipd.sdq.xocl4inv.eval.model.Book, ?> function|
+		target.groupBy[function.apply(it)].values.forall[it.size == 1]
+	]
+	unique.apply(_self.books, [edu.kit.ipd.sdq.xocl4inv.eval.model.Book b| b.copies])
+}
+ocl "self.books->isUnique(b|b.copies)"
+
+xbaseocl Collection_any
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Single")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("True")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("False")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.build
+	]
+}
+xbase _self.books.findFirst[b| b.copies == 2]
+ocl "self.books->any(b|b.copies = 2)"
+
+xbaseocl Collection_collectNested // collectNested is map, collect is map.flatten
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Single")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Multiple")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Reverse")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build
+	]
+}
+xbase _self.books.map[b|b.copies]
+ocl "self.books->collectNested(b|b.copies)"
+
+xbaseocl Collection_collect
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Single")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Multiple")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Reverse")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build
+	]
+}
+xbase _self.books.map[b|b.copies]
+ocl "self.books->collect(b|b.copies)"
+
+xbaseocl Collection_exists
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Single")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("True")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("False")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.build
+	]
+}
+xbase _self.books.exists[b|b.copies == 2]
+ocl "self.books->exists(b|b.copies = 2)"
+
+xbaseocl Collection_forAll
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Single")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("True")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("False")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 3).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 4).build)
+		.build
+	]
+}
+xbase _self.books.forall[b|b.copies < 4]
+ocl "self.books->forAll(b|b.copies < 4)"
+
+xbaseocl Collection_iterate
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Single")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Multiple")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.build
+	]
+}
+xbase _self.books.fold(0, [s, b|s + b.copies])
+ocl "self.books->iterate(b; s : Integer = 0 | s + b.copies)"
+
+xbaseocl Collection_select
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Single")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("All")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Some")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 3).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 4).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("None")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 5).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 4).build)
+		.build
+	]
+}
+xbase _self.books.filter[b|b.copies < 4]
+ocl "self.books->select(b|b.copies < 4)"
+
+xbaseocl Collection_reject
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Single")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("None")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Some")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 3).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 4).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("All")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 5).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 4).build)
+		.build
+	]
+}
+xbase _self.books.filter[b|!(b.copies < 4)]
+ocl "self.books->reject(b|b.copies < 4)"
+
+xbaseocl Collection_sortedBy
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Single")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Multiple")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Reverse")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 3).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 4).build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Mixed")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 5).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 4).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 3", 5).build)
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 4", 1).build)
+		.build
+	]
+}
+xbase _self.books.sortedBy[b|b.copies]
+ocl "self.books->sortedBy(b|b.copies)"

@@ -1,0 +1,139 @@
+import "http://sdq.ipd.kit.edu/xocl4inv/eval/model" as mdl
+
+xbaseocl Collection_size
+context mdl.Library
+input {	
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Nonempty")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build
+	]
+}
+xbase _self.books.size
+ocl "self.books->size()"
+
+xbaseocl Collection_empty
+context mdl.Library
+input {	
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Nonempty")
+			.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 2).build)
+		.build
+	]
+}
+xbase _self.books.empty
+ocl "self.books->isEmpty()"
+
+xbaseocl Collection_includes
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("True")
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+		.addLoan("Member 1", "Book 1", 1)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("False")
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+		.addLoan("Member 2", "Book 1", 1)
+		.build
+	]
+} 
+xbase _self.books.get(0).loans.map[it.member].contains(_self.members.get(0))
+ocl "self.books->at(1).loans->collect(member)->includes(self.members->at(1))"
+
+xbaseocl Collection_excludes
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("False")
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+		.addLoan("Member 1", "Book 1", 1)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("True")
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+		.addLoan("Member 2", "Book 1", 1)
+		.build
+	]
+} 
+xbase !_self.books.get(0).loans.map[it.member].contains(_self.members.get(0))
+ocl "self.books->at(1).loans->collect(member)->excludes(self.members->at(1))"
+
+xbaseocl Collection_includesAll
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("False")
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+		.addLoan("Member 1", "Book 1", 1)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("True")
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+		.addLoan("Member 1", "Book 1", 1)
+		.addLoan("Member 2", "Book 1", 1)
+		.build
+	]
+} 
+xbase _self.books.get(0).loans.map[it.member].containsAll(_self.members)
+ocl "self.books->at(1).loans->collect(member)->includesAll(self.members)"
+
+xbaseocl Collection_excludesAll_extension
+context mdl.Library
+input {
+	#[
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("Empty")
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 3").build)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("False")
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 3").build)
+		.addLoan("Member 1", "Book 1", 1)
+		.build,
+		new edu.kit.ipd.sdq.xocl4inv.eval.model.util.LibraryBuilder("True")
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 1", 1).build)
+		.addBook(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.BookBuilder("Book 2", 1).build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 1").build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 2").build)
+		.addMember(new edu.kit.ipd.sdq.xocl4inv.eval.model.util.MemberBuilder("Member 3").build)
+		.addLoan("Member 1", "Book 1", 1)
+		.addLoan("Member 2", "Book 1", 1)
+		.build
+	]
+} 
+xbase {
+	var excludesAll = [Iterable<edu.kit.ipd.sdq.xocl4inv.eval.model.Member> target, Iterable<edu.kit.ipd.sdq.xocl4inv.eval.model.Member> arg|arg.forall[!target.includes(it)]]
+	excludesAll.apply(_self.books.get(0).loans.map[it.member], _self.members)
+}
+ocl "self.books->at(1).loans->collect(member)->excludesAll(self.members)"

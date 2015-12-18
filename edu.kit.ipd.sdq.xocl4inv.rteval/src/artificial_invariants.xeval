@@ -1,0 +1,108 @@
+import "http://sdq.ipd.kit.edu/xocl4inv/eval/model" as mdl
+
+/* Basics */
+invariant simpleForall (mdl.Book b)
+context mdl.Library
+check _self.books.forall[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available]
+// _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|!b.available]
+
+invariant simpleExists (mdl.Book b)
+context mdl.Library
+check _self.books.exists[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available]
+// _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|!_self.books.exists[b__new|b__new.available]]
+
+invariant mapForall (mdl.Book b)
+context mdl.Library
+check _self.books.map[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.copies].forall[c|c>5]
+// _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|!b.copies>5]
+
+invariant selectForall (mdl.Book b)
+context mdl.Library
+check _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available].forall[c|c.copies > 5]
+// _self.books.select[b.available && !b.copies>5]
+
+invariant mapExists (mdl.Book b)
+context mdl.Library
+check _self.books.map[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.copies].exists[c|c>5]
+// _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|!_self.books.map[b__new|b__new.copies].exists[c__new|c__new>5]]
+
+invariant selectExists (mdl.Book b)
+context mdl.Library
+check _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available].exists[c|c.copies > 5]
+// _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available && !_self.books.map[b__new|b__new.copies].exists[c__new|c__new>5]]
+
+invariant simpleOr (mdl.Book b)
+context mdl.Library
+check _self.books.size == 1 || _self.books.forall[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available]
+// _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|!b.available && !(_self.books.size == 1)]
+
+invariant simpleAnd (mdl.Book b)
+context mdl.Library
+check !_self.books.empty && _self.books.forall[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available]
+// _self.books.select[!b.available]
+
+/* Negation */
+invariant notsimpleForall (mdl.Book b)
+context mdl.Library
+check !_self.books.forall[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available]
+// _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|!_self.books.exists[b__new|!b__new.available]]
+
+invariant notsimpleExists (mdl.Book b)
+context mdl.Library
+check !_self.books.exists[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available]
+// _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|!!b.available]
+
+invariant notmapForall (mdl.Book b)
+context mdl.Library
+check !_self.books.map[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.copies].forall[c|c>5]
+// _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|!_self.books.map[b__new|b__new.copies].exists[c__new|!(c__new > 5)]]
+
+invariant notselectForall (mdl.Book b)
+context mdl.Library
+check !_self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available].forall[c|c.copies > 5]
+// _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available && !_self.books.select[b__new|b__new.available].exists[c__new|!(c__new.copies > 5)]]
+
+invariant notmapExists (mdl.Book b)
+context mdl.Library
+check !_self.books.map[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.copies].exists[c|c>5]
+// _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|!!b.copies > 5]
+
+invariant notselectExists (mdl.Book b)
+context mdl.Library
+check! _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available].exists[c|c.copies > 5]
+// _self.books.select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available && !!b.copies > 5]
+
+invariant notsimpleOr (mdl.Book b)
+context mdl.Library
+check !(_self.books.empty || _self.books.forall[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available])
+// _self.books.select[!_self.books.exists[b|!b.available] && true]
+
+invariant notsimpleAnd (mdl.Book b)
+context mdl.Library
+check !(!_self.books.empty && _self.books.forall[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available])
+// _self.books.select[!_self.books.exists[b|!(b.available] && !!!_self.books.empty]
+
+/* Nested */
+invariant binaryNested (mdl.Book b)
+context mdl.Library
+check (!_self.books.empty && (_self.books.forall[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available] 
+	|| _self.books.exists[a|a.copies > 2]))	|| _self.books.size > 3
+// _self.books.select[b|!b.available && !_self.books.exists[a|a.copies > 2] && !_self.books.size > 3]
+
+invariant forallNested (mdl.Book b)
+context mdl.Library
+check _self.books.size > 2 || _self.books.forall[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available]
+// _self.books.select[b|!b.available && !(_self.books.size > 2)]
+
+invariant existsNested (mdl.Book b)
+context mdl.Library
+check _self.books.size > 2 || _self.books.exists[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b|b.available]
+// _self.books.select[!_self.books.exists[b|b.available] && !(_self.books.size > 2)]
+
+// Complex
+invariant MainExample (mdl.Book a)
+context mdl.Library
+check
+!_self.books.empty && _self.books
+   .select[edu.kit.ipd.sdq.xocl4inv.eval.model.Book a|a.available].map[b|b.copies].forall[c|c>5]
+
