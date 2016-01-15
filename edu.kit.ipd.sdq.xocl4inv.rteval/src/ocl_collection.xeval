@@ -49,7 +49,7 @@ input {
 		.build
 	]
 } 
-xbase _self.books.get(0).loans.map[it.member].contains(_self.members.get(0))
+xbase _self.books.get(0).loans.map[temp1 | temp1.member].contains(_self.members.get(0))
 ocl "self.books->at(1).loans->collect(member)->includes(self.members->at(1))"
 
 xbaseocl Collection_excludes
@@ -73,7 +73,7 @@ input {
 		.build
 	]
 } 
-xbase !_self.books.get(0).loans.map[it.member].contains(_self.members.get(0))
+xbase !_self.books.get(0).loans.map[temp1 | temp1.member].contains(_self.members.get(0))
 ocl "self.books->at(1).loans->collect(member)->excludes(self.members->at(1))"
 
 xbaseocl Collection_includesAll
@@ -99,7 +99,7 @@ input {
 		.build
 	]
 } 
-xbase _self.books.get(0).loans.map[it.member].containsAll(_self.members)
+xbase _self.books.get(0).loans.map[temp1 | temp1.member].containsAll(_self.members)
 ocl "self.books->at(1).loans->collect(member)->includesAll(self.members)"
 
 xbaseocl Collection_excludesAll_extension
