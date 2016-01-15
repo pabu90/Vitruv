@@ -36,7 +36,13 @@ class XOclGenerator implements IGenerator {
 
 	private def String getFileName(Resource input) {
 		var fileURI = input.getURI();
-		return fileURI.lastSegment;
+		var filename =  fileURI.lastSegment;
+		
+		if (filename.indexOf(".") > 0) {
+			filename = filename.substring(0, filename.lastIndexOf("."));
+		}
+		
+		return filename;
 	}
 
 	private def void createXOclFile(IFileSystemAccess fsa, String fileName, List<Constraint> constraints) {
@@ -74,26 +80,12 @@ class XOclGenerator implements IGenerator {
 	
 	def dispatch String transform(PropertyCallExp expression)
 		'''«transform(expression.source)».«transform(expression.referredProperty)»'''
-	
-	def dispatch String transform(CollectionLiteralExp expression)
-		'''«FOR part : expression.part»«transform(part)»«ENDFOR»'''
-
-	def dispatch String transform(CollectionItem expression)
-		'''«transform(expression.item)»'''
 		
-	def dispatch String transform(IteratorExp expression) {
-		//TODO: what is the difference of IteratorExp and IterateExp?
-		
-		//TODO: forAll(a,b)			coll.product(coll).forall(predicate)
-		//TODO: exists(a,b)			coll.product(coll).exists(predicate)
-		//TODO: isUnique			coll.groupBy[function.apply(it)].values.forall[it.size == 1]
-		//TODO: one					coll.filter(predicate).size == 1
-		
+	def dispatch String transform(IteratorExp expression) {		
 		var iteratorName = "";
 		
 		switch expression.name {
 			case 'forAll': iteratorName = "forall"
-			case 'iterate': iteratorName = "fold"
 			case 'select': iteratorName = "filter"
 			case 'collect': iteratorName = "map"
 			case 'collectNested': iteratorName = "map"
@@ -106,17 +98,23 @@ class XOclGenerator implements IGenerator {
 			default: iteratorName = expression.name
 		}
 		
-		//TODO: necesarry to replace temp with it? (string.replace("temp", "it"))
 		'''«transform(expression.source)».«iteratorName»[«transform(expression.iterator)» | «transform(expression.body)»]'''
 	}
 	
 	def dispatch String transform(IterateExp expression) {
-		throw new UnsupportedOperationException
+		'''«transform(expression.source)».fold(«transform(expression.result.initExpression)», [«transform(expression.result)», «transform(expression.iterator)» | «transform(expression.body)»])'''
 	}
 
-	def dispatch String transform(EList<?> expression) {
-		'''«FOR element : expression SEPARATOR ", "»«transform(element)»«ENDFOR»''';
+	def dispatch String transform(EList<?> expression)
+		'''«FOR element : expression SEPARATOR ", "»«transform(element)»«ENDFOR»'''
+		
+	def dispatch String transform(CollectionLiteralExp expression) {
+		//expression part is a EList
+		'''«FOR part : expression.part SEPARATOR ", "»«transform(part)»«ENDFOR»'''
 	}
+		
+	def dispatch String transform(CollectionItem expression)
+		'''«transform(expression.item)»'''
 	
 	def dispatch String transform(OperationCallExp expression) {
 		var prefix = "";
@@ -142,8 +140,6 @@ class XOclGenerator implements IGenerator {
 			case 'notEmpty': { operationCallSign = "."; useParentheses = true; prefix = "!"; }
 			default: { operationCallSign = "."; useParentheses = true; }
 		}
-		
-		//TODO: when referred Operation "at" (get) decrement the argument by one
 
 		if(useParentheses) {
 			if(arguments.equals("")) {
@@ -157,9 +153,7 @@ class XOclGenerator implements IGenerator {
 	
 	def dispatch String transform(EOperation expression) {
 		var operationName = "";
-		
-		//TODO: excludesAll		objects.forall[!coll.contains(it)]
-		
+
 		switch expression.name {
 			case 'includes': operationName = "contains"
 			case 'includesAll': operationName = "containsAll"
@@ -182,6 +176,7 @@ class XOclGenerator implements IGenerator {
 		'''«expression.integerSymbol»'''
 
 	def dispatch String transform(UnlimitedNaturalLiteralExp expression) {
+		//TODO
 		throw new UnsupportedOperationException
 	}
 	
@@ -194,15 +189,24 @@ class XOclGenerator implements IGenerator {
 	def dispatch String transform(EAttribute expression)
 		'''«expression.name»'''
 		
-	def dispatch String transform(Variable expression) 
-		'''«expression.name»'''
+	def dispatch String transform(Variable expression) {
+		//TODO: initExpression? see IterateExp
 		
-	def dispatch String transform(VariableExp expression)
-		'''«expression.name»'''
+		//self is a keyword in xbase so it has to be escaped
+		if(expression.name.equals("self")) {
+			return '''_«expression.name»'''
+		}
+		return '''«expression.name»'''
+	}
+
+	def dispatch String transform(VariableExp expression) {
+		//self is a keyword in xbase so it has to be escaped
+		if(expression.name.equals("self")) {
+			return '''_«expression.name»'''
+		}
+		return '''«expression.name»'''
+	}
 
 	def dispatch String transform(EReference expression)
 		'''«expression.name»'''
-	
-	
-//If [b : Book | ... ] should be generated: '''«FOR variable : expression SEPARATOR ','»«variable.name» : «variable.EGenericType.ERawType.name»«ENDFOR»'''
 }
