@@ -7,6 +7,8 @@ import org.eclipse.xtext.xbase.compiler.JvmModelGenerator;
 
 import com.google.inject.Inject;
 
+import edu.kit.ipd.sdq.ocl2xocl4inv.generator.XOclGenerator;
+
 /**
  * This class generates all required artifacts for TestGeneratorDSL.
  *
@@ -19,6 +21,7 @@ public class XoclEvalDSLGenerator implements IGenerator {
 	private InvariantGenerator invariantGenerator;
 	private XbaseOclGenerator xbaseOclGenerator;
 	private TransformationGenerator transformationGenerator;
+	private XoclFromOclGenerator xoclFromOclGenerator;
 
 	/**
 	 * Constructs default generator.
@@ -31,15 +34,18 @@ public class XoclEvalDSLGenerator implements IGenerator {
 	 *            xbaseOclGenerator
 	 * @param transformationGenerator
 	 *            transformationGenerator
+	 * @param xoclFromOclGenerator
+	 *            xoclFromOclGenerator
 	 */
 	@Inject
 	public XoclEvalDSLGenerator(JvmModelGenerator jvmModelGenerator, InvariantGenerator invariantGenerator,
-			XbaseOclGenerator xbaseOclGenerator, TransformationGenerator transformationGenerator) {
+			XbaseOclGenerator xbaseOclGenerator, TransformationGenerator transformationGenerator, XoclFromOclGenerator xoclFromOclGenerator) {
 
 		this.jvmModelGenerator = jvmModelGenerator;
 		this.invariantGenerator = invariantGenerator;
 		this.xbaseOclGenerator = xbaseOclGenerator;
 		this.transformationGenerator = transformationGenerator;
+		this.xoclFromOclGenerator = xoclFromOclGenerator;
 	}
 
 	@Override
@@ -48,6 +54,7 @@ public class XoclEvalDSLGenerator implements IGenerator {
 		invariantGenerator.doGenerate(input, fsa);
 		xbaseOclGenerator.doGenerate(input, fsa);
 		transformationGenerator.doGenerate(input, fsa);
+		xoclFromOclGenerator.doGenerate(input, fsa);
 	}
 
 }
