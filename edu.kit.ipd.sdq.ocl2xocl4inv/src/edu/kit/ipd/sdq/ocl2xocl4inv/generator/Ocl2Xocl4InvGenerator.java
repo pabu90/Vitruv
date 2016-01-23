@@ -4,10 +4,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.generator.IFileSystemAccess;
 import org.eclipse.xtext.generator.IGenerator;
 
-import edu.kit.ipd.sdq.xocl4inv.xOcl4InvDSL.Invariant;
-import edu.kit.ipd.sdq.xocl4inv.xOcl4InvDSL.XOcl4InvDSLFactory;
-import edu.kit.ipd.sdq.xocl4inv.xOcl4InvDSL.impl.XOcl4InvDSLFactoryImpl;
-
 public class Ocl2Xocl4InvGenerator implements IGenerator {
 
 	private XOclGenerator xoclGenerator;
