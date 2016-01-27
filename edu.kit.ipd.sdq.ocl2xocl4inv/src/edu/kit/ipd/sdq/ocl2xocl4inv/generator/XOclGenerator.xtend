@@ -54,9 +54,11 @@ class XOclGenerator implements IGenerator {
 	private def void createXOclFile(IFileSystemAccess fsa, String fileName, List<Constraint> constraints) {
 		fsa.generateFile(
 			fileName,
-			'''«FOR constraint : constraints»
-				context «constraint.specification.contextVariable.type.name»
+			'''
+				import "TODO" as mdl
+				«FOR constraint : constraints»
 				invariant «constraint.name» ()
+				context mdl.«constraint.specification.contextVariable.type.name»
 				check «getExpression(constraint)»
 				 
 				«ENDFOR»'''
@@ -98,18 +100,7 @@ class XOclGenerator implements IGenerator {
 			case 'sortedBy': iteratorName = "sortedBy"	//in paper "sortBy"
 			case 'any': iteratorName = "findFirst"
 			case 'isUnique': iteratorName = "unique"
-			case 'forAll': { 
-				if(iterator.contains(',')) {
-					iteratorName = "forAll"	//use forAll if function has more than one iterator
-				}
-				else {
-					iteratorName = "forall"	//use forall if function has only one iterator
-				} 
-			} 
-			case 'reject': {
-				iteratorName = "filter";
-				return '''«source».«iteratorName»[«iterator» | !(«expressionBody»)]''' 
-			}
+			case 'forAll': iteratorName = "forAll"	//in paper "forall"
 			default: iteratorName = expression.name
 		}
 		
@@ -140,7 +131,6 @@ class XOclGenerator implements IGenerator {
 		'''«transform(expression.item)»'''
 	
 	def dispatch String transform(OperationCallExp expression) {
-		var prefix = "";
 		var operationCallSign = "";
 		var useParentheses = false;
 		
@@ -161,7 +151,6 @@ class XOclGenerator implements IGenerator {
 			case '<>': operationCallSign = " "
 			case 'and': operationCallSign = " "
 			case 'or': operationCallSign = " "
-			case 'excludes': { operationCallSign = "."; useParentheses = true; prefix = "!"; }
 			case 'not': return '''«referredOperation»(«source»)'''
 			case 'implies': return '''(«source»).«referredOperation»(«arguments»)'''
 			case 'at': { 
@@ -175,12 +164,12 @@ class XOclGenerator implements IGenerator {
 
 		if(useParentheses) {
 			if(arguments.equals("")) {
-				return '''«prefix»«source»«operationCallSign»«referredOperation»'''
+				return '''«source»«operationCallSign»«referredOperation»'''
 			}
-			return '''«prefix»«source»«operationCallSign»«referredOperation»(«arguments»)'''
+			return '''«source»«operationCallSign»«referredOperation»(«arguments»)'''
 		}
 
-		return '''«prefix»«source»«operationCallSign»«referredOperation» «arguments»'''
+		return '''«source»«operationCallSign»«referredOperation» «arguments»'''
 	}
 	
 	def dispatch String transform(EOperation expression) {
@@ -190,7 +179,6 @@ class XOclGenerator implements IGenerator {
 			case 'includes': operationName = "contains"
 			case 'includesAll': operationName = "containsAll"
 			case 'isEmpty': operationName = "empty"
-			case 'excludes': operationName = "contains"
 			case 'at': operationName = "get"
 			case '=': operationName = "=="
 			case '<>': operationName = "!="
