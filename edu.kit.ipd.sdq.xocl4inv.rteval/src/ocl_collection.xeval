@@ -73,7 +73,7 @@ input {
 		.build
 	]
 } 
-xbase !_self.books.get(0).loans.map[temp1 | temp1.member].contains(_self.members.get(0))
+xbase _self.books.get(0).loans.map[temp1 | temp1.member].excludes(_self.members.get(0))
 ocl "self.books->at(1).loans->collect(member)->excludes(self.members->at(1))"
 
 xbaseocl Collection_includesAll
@@ -133,7 +133,7 @@ input {
 	]
 } 
 xbase {
-	var excludesAll = [Iterable<edu.kit.ipd.sdq.xocl4inv.eval.model.Member> target, Iterable<edu.kit.ipd.sdq.xocl4inv.eval.model.Member> arg|arg.forall[!target.includes(it)]]
+	var excludesAll = [Iterable<edu.kit.ipd.sdq.xocl4inv.eval.model.Member> target, Iterable<edu.kit.ipd.sdq.xocl4inv.eval.model.Member> arg|arg.forAll[!target.includes(it)]]
 	excludesAll.apply(_self.books.get(0).loans.map[it.member], _self.members)
 }
 ocl "self.books->at(1).loans->collect(member)->excludesAll(self.members)"

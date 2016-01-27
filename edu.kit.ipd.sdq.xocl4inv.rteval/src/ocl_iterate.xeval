@@ -44,7 +44,7 @@ input {
 }
 xbase {
 	var unique = [Iterable<edu.kit.ipd.sdq.xocl4inv.eval.model.Book> target, Functions.Function1<edu.kit.ipd.sdq.xocl4inv.eval.model.Book, ?> function|
-		target.groupBy[function.apply(it)].values.forall[it.size == 1]
+		target.groupBy[function.apply(it)].values.forAll[it.size == 1]
 	]
 	unique.apply(_self.books, [edu.kit.ipd.sdq.xocl4inv.eval.model.Book b| b.copies])
 }
@@ -157,7 +157,7 @@ input {
 		.build
 	]
 }
-xbase _self.books.forall[b|b.copies < 4]
+xbase _self.books.forAll[b|b.copies < 4]
 ocl "self.books->forAll(b|b.copies < 4)"
 
 xbaseocl Collection_iterate
@@ -227,7 +227,7 @@ input {
 		.build
 	]
 }
-xbase _self.books.filter[b|!(b.copies < 4)]
+xbase _self.books.reject[b|b.copies < 4]
 ocl "self.books->reject(b|b.copies < 4)"
 
 xbaseocl Collection_sortedBy
