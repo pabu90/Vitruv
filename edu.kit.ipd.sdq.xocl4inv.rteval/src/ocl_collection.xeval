@@ -132,8 +132,5 @@ input {
 		.build
 	]
 } 
-xbase {
-	var excludesAll = [Iterable<edu.kit.ipd.sdq.xocl4inv.eval.model.Member> target, Iterable<edu.kit.ipd.sdq.xocl4inv.eval.model.Member> arg|arg.forAll[!target.includes(it)]]
-	excludesAll.apply(_self.books.get(0).loans.map[it.member], _self.members)
-}
+xbase _self.books.get(0).loans.map[temp1|temp1.member].excludesAll(_self.members)
 ocl "self.books->at(1).loans->collect(member)->excludesAll(self.members)"

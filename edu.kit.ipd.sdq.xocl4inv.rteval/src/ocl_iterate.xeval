@@ -42,12 +42,7 @@ input {
 		.build
 	]
 }
-xbase {
-	var unique = [Iterable<edu.kit.ipd.sdq.xocl4inv.eval.model.Book> target, Functions.Function1<edu.kit.ipd.sdq.xocl4inv.eval.model.Book, ?> function|
-		target.groupBy[function.apply(it)].values.forAll[it.size == 1]
-	]
-	unique.apply(_self.books, [edu.kit.ipd.sdq.xocl4inv.eval.model.Book b| b.copies])
-}
+xbase _self.books.unique[b|b.copies]
 ocl "self.books->isUnique(b|b.copies)"
 
 xbaseocl Collection_any
