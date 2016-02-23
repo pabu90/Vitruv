@@ -65,7 +65,7 @@ class XoclFromOclGenerator  implements IGenerator {
 					// Model
 					import edu.kit.ipd.sdq.xocl4inv.eval.model.ModelPackage
 					import edu.kit.ipd.sdq.xocl4inv.eval.model.util.ModelComparator
-					import edu.kit.ipd.sdq.ocl2xocl4inv.generator.XOclGenerator
+					import edu.kit.ipd.sdq.ocl2xocl4inv.generator.XOclTransformer
 					
 					// static extensions
 					import static extension «PureIterableExtensions.canonicalName».*
@@ -131,8 +131,7 @@ class XoclFromOclGenerator  implements IGenerator {
 				val /* OCLExpression<EClassifier> */ query = 
 					helper.createQuery("«test.ocl»")
 							
-				val xoclGenerator = new XOclGenerator();
-				xoclGenerator.createXOclInvariant(query)
+				XOclTransformer.createXOclInvariant(query)
 			}
 		'''
 	}
