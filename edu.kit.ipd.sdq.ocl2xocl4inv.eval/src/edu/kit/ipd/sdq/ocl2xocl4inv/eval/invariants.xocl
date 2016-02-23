@@ -1,0 +1,17 @@
+import "http://sdq.ipd.kit.edu/xocl4inv/eval/model" as mdl
+
+invariant SizeTest
+context mdl.Library
+check _self.books.size > 2
+
+invariant SizeTest2
+context mdl.Library
+check _self.books.size > 2
+
+invariant AtLeast3ReferenceCopies (mdl.Book b)
+context mdl.Library
+check _self.books.forAll[edu.kit.ipd.sdq.xocl4inv.eval.model.Book b | b.name == 'test' ]
+
+invariant AtLeast3ReferenceCopies2
+context mdl.Library
+check _self.books.forAll[b | b.name == 'test' ]

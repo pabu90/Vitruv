@@ -1,0 +1,17 @@
+Manifest-Version: 1.0 
+Bundle-ManifestVersion: 2
+Bundle-Name: edu.kit.ipd.sdq.ocl2xocl4inv.eval
+Bundle-SymbolicName: edu.kit.ipd.sdq.ocl2xocl4inv.eval
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.junit,
+ org.eclipse.ocl.ecore,
+ org.eclipse.xtext.ui,
+ org.eclipse.xtext.xbase,
+ edu.kit.ipd.sdq.ocl2xocl4inv;bundle-version="1.0.0",
+ edu.kit.ipd.sdq.xocl4inv,
+ edu.kit.ipd.sdq.xocl4inv.ui,
+ edu.kit.ipd.sdq.xocl4inv.eval;bundle-version="1.0.0",
+ edu.kit.ipd.sdq.xocl4inv.eval.model;bundle-version="1.0.0",
+ org.eclipse.uml2.uml;bundle-version="5.1.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+
