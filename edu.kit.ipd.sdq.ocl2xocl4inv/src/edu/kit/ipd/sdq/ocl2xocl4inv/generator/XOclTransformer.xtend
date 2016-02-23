@@ -142,8 +142,14 @@ public class XOclTransformer {
 			case 'at': { 
 				operationCallSign = "."; useParentheses = true;
 				//'at' expects a value > 0 but 'get' expects a value >= 0 --> decrement argument by one
-				var arg = Integer.parseInt(arguments);
-				arguments = (arg-1).toString; 
+				try {
+					var arg = Integer.parseInt(arguments);
+					arguments = (arg-1).toString; 
+				}
+				catch(Exception ex) {
+					//can't cast it to int because it is an integer variable
+					arguments = arguments + " - 1";
+				}
 			}
 			default: { operationCallSign = "."; useParentheses = true; }
 		}
