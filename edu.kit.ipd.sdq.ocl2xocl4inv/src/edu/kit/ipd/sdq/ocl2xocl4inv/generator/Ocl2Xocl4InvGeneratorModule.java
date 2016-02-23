@@ -6,7 +6,6 @@ public class Ocl2Xocl4InvGeneratorModule extends AbstractEcore2TxtGeneratorModul
 
 	@Override
 	protected String getLanguageName() {
-		// TODO what should i return here?
 		return "";
 	}
 

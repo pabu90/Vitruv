@@ -15,44 +15,60 @@ import org.eclipse.ocl.helper.OCLHelper
 
 class OclInvariantExtractor {
 
-	public def List<Constraint> getConstraints(Resource input) {
-		var constraintList = new ArrayList<Constraint>();
+	private int modelCount = 1;
 
-		if(input.contents.size == 0) return constraintList;
+	public def void getConstraints(Resource input, List<String> constraintList, List<String> importList) {
+		if(input.contents.size == 0) return;
 
 		// access the root package element of the ecore file
 		var data = input.contents.get(0);
 		var package = data as EPackage;
 
-		if(package == null) return constraintList;
+		if(package == null) return;
 
 		// create the ocl helper to parse the ocl invariants from string
 		var ocl = OCL.newInstance(EcoreEnvironmentFactory.INSTANCE);
 		var oclHelper = ocl.createOCLHelper();
 
-		checkPackageForConstraints(constraintList, oclHelper, package);
-
-		return constraintList;
+		createInvariantsFromPackage(constraintList, importList, oclHelper, package);
 	}
 	
-	
-	private def void checkPackageForConstraints(List<Constraint> constraintList, OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint> oclHelper, EPackage ePackage) {
+	private def void createInvariantsFromPackage(List<String> constraintList, List<String> importList, OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint> oclHelper, EPackage ePackage) {
 		var classifierList = ePackage.EClassifiers
+		var constraints = new ArrayList<Constraint>();
 
 		for (classifier : classifierList) {
-			checkClassifierForDefaultConstraintStyle(constraintList, oclHelper, classifier);
-			checkClassifierForOperationConstraintStyle(constraintList, oclHelper, classifier);
+			checkClassifierForDefaultConstraintStyle(constraints, oclHelper, classifier);
+			checkClassifierForOperationConstraintStyle(constraints, oclHelper, classifier);
+		}
+		
+		if(constraints.size != 0) {
+			//create imports and xocl invariants			
+			importList.add(
+				'''
+					import "«ePackage.nsURI»" as mdl«modelCount»
+					''')
+			
+			for (constraint : constraints) {
+				constraintList.add(
+				'''
+					invariant «constraint.name» ()
+					context mdl«modelCount».«constraint.specification.contextVariable.type.name»
+					check «XOclTransformer.getExpression(constraint)»
+					 
+					''')
+			}	
+			
+			modelCount++;
 		}
 		
 		//check the subpackages
 		var subpackages = ePackage.ESubpackages;
 		for (packageItem : subpackages) {
-			checkPackageForConstraints(constraintList, oclHelper, packageItem);
+			createInvariantsFromPackage(constraintList, importList, oclHelper, packageItem);
 		}		
 	}
 	
-	
-		
 	private def void checkClassifierForDefaultConstraintStyle(List<Constraint> constraintList, OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint> oclHelper, EClassifier eClassifier) {
 		// the names of the constraints are listed in an annotation with the key "constraints" (the names are sperated with a whitespace)
 		var annotationWithConstraintNames = eClassifier.EAnnotations.findFirst [ annotation | annotation.details.get("constraints") != null ]
