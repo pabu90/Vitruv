@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Nicolas Pätzold.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *    Nicolas Pätzold - initial API and implementation and/or initial documentation
+ *******************************************************************************/
 package edu.kit.ipd.sdq.ocl2xocl4inv.generator
 
 import java.util.ArrayList
@@ -13,10 +23,21 @@ import org.eclipse.ocl.ecore.Constraint
 import org.eclipse.ocl.ecore.EcoreEnvironmentFactory
 import org.eclipse.ocl.helper.OCLHelper
 
+ /**
+ * This class extracts the constraints from an ecore file.
+ * 
+ * @author npaetz
+ */
 class OclInvariantExtractor {
 
 	private int modelCount = 1;
 
+ 	/**
+	 * Get the constraints from an ecore file.
+	 * @param input Resource
+	 * @param constraintList List<String>
+	 * @param importList List<String>
+	 */
 	public def void getConstraints(Resource input, List<String> constraintList, List<String> importList) {
 		if(input.contents.size == 0) return;
 
@@ -33,6 +54,13 @@ class OclInvariantExtractor {
 		createInvariantsFromPackage(constraintList, importList, oclHelper, package);
 	}
 	
+ 	/**
+	 * Create the xocl4inv invariants for a specific epackage.
+	 * @param constraintList List<String>
+	 * @param importList List<String>
+	 * @param oclHelper OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint>
+	 * @param ePackage EPackage
+	 */
 	private def void createInvariantsFromPackage(List<String> constraintList, List<String> importList, OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint> oclHelper, EPackage ePackage) {
 		var classifierList = ePackage.EClassifiers
 		var constraints = new ArrayList<Constraint>();
@@ -69,6 +97,13 @@ class OclInvariantExtractor {
 		}		
 	}
 	
+	 /**
+	 * Check the eClassifier element for constraints in the default style.
+	 * @param constraintList List<String>
+	 * @param importList List<String>
+	 * @param oclHelper OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint>
+	 * @param eClassifier EClassifier
+	 */
 	private def void checkClassifierForDefaultConstraintStyle(List<Constraint> constraintList, OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint> oclHelper, EClassifier eClassifier) {
 		// the names of the constraints are listed in an annotation with the key "constraints" (the names are sperated with a whitespace)
 		var annotationWithConstraintNames = eClassifier.EAnnotations.findFirst [ annotation | annotation.details.get("constraints") != null ]
@@ -94,6 +129,13 @@ class OclInvariantExtractor {
 		}
 	}
 	
+	 /**
+	 * Check the eClassifier element for constraints in the operation style.
+	 * @param constraintList List<String>
+	 * @param importList List<String>
+	 * @param oclHelper OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint>
+	 * @param eClassifier EClassifier
+	 */
 	private def void checkClassifierForOperationConstraintStyle(List<Constraint> constraintList, OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint> oclHelper, EClassifier eClassifier) {
 		// the invariants are in an annotation with the key "body" in the eOperations. The invariant name is the name of the operation
 		if (eClassifier instanceof EClass) {
