@@ -66,8 +66,7 @@ class OclInvariantExtractor {
 		var constraints = new ArrayList<Constraint>();
 
 		for (classifier : classifierList) {
-			checkClassifierForDefaultConstraintStyle(constraints, oclHelper, classifier);
-			checkClassifierForOperationConstraintStyle(constraints, oclHelper, classifier);
+			checkClassifierForConstraints(constraints, oclHelper, classifier);
 		}
 		
 		if(constraints.size != 0) {
@@ -98,13 +97,13 @@ class OclInvariantExtractor {
 	}
 	
 	 /**
-	 * Check the eClassifier element for constraints in the default style.
+	 * Checks the eClassifier element for constraints.
 	 * @param constraintList List<String>
 	 * @param importList List<String>
 	 * @param oclHelper OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint>
 	 * @param eClassifier EClassifier
 	 */
-	private def void checkClassifierForDefaultConstraintStyle(List<Constraint> constraintList, OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint> oclHelper, EClassifier eClassifier) {
+	private def void checkClassifierForConstraints(List<Constraint> constraintList, OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint> oclHelper, EClassifier eClassifier) {
 		// the names of the constraints are listed in an annotation with the key "constraints" (the names are sperated with a whitespace)
 		var annotationWithConstraintNames = eClassifier.EAnnotations.findFirst [ annotation | annotation.details.get("constraints") != null ]
 		if(annotationWithConstraintNames == null) return;
@@ -114,7 +113,7 @@ class OclInvariantExtractor {
 		for (annotation : eClassifier.EAnnotations) {
 			// iterate through the annotations and look for the constraint names as keys			
 			for (annotationDetail : annotation.details) {
-				if (invariantNames.contains(annotationDetail.key)) {
+				if (annotationDetail.key == null || invariantNames.contains(annotationDetail.key)) {
 					try {
 						oclHelper.setContext(eClassifier); // set the OCL context to the classifier
 						val invariant = oclHelper.createInvariant(annotationDetail.value);
@@ -124,38 +123,6 @@ class OclInvariantExtractor {
 					} catch (Exception ex) {
 						System.out.println(ex);
 					}
-				}
-			}
-		}
-	}
-	
-	 /**
-	 * Check the eClassifier element for constraints in the operation style.
-	 * @param constraintList List<String>
-	 * @param importList List<String>
-	 * @param oclHelper OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint>
-	 * @param eClassifier EClassifier
-	 */
-	private def void checkClassifierForOperationConstraintStyle(List<Constraint> constraintList, OCLHelper<EClassifier, EOperation, EStructuralFeature, Constraint> oclHelper, EClassifier eClassifier) {
-		// the invariants are in an annotation with the key "body" in the eOperations. The invariant name is the name of the operation
-		if (eClassifier instanceof EClass) {
-			var eObject = eClassifier as EClass;
-			var operations = eObject.EAllOperations;
-
-			for (operation : operations) {
-				var annotationWithConstraint = operation.EAnnotations.findFirst [ annotation | annotation.details.get("body") != null ]
-				if(annotationWithConstraint == null) return;
-
-				var constraintString = annotationWithConstraint.details.get("body");
-
-				try {
-					oclHelper.setContext(eClassifier); // set the OCL context to the classifier
-					val invariant = oclHelper.createInvariant(constraintString);
-					invariant.name = operation.name;
-
-					constraintList.add(invariant);
-				} catch (Exception ex) {
-					System.out.println(ex);
 				}
 			}
 		}
