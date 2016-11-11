@@ -22,7 +22,7 @@ Require-Bundle: com.google.guava,
  tools.vitruv.framework.change.processing,
  tools.vitruv.framework.correspondence,
  tools.vitruv.framework.metamodel,
- tools.vitruv.domains.pcm.util;visibility:=reexport,
+ tools.vitruv.domains.pcm;visibility:=reexport,
  tools.vitruv.domains.java.util;visibility:=reexport,
  tools.vitruv.domains.java.echange,
  tools.vitruv.domains.java.util.jamoppparser
