@@ -1,4 +1,4 @@
-package tools.vitruv.domains.java.util.jamopp
+package tools.vitruv.domains.java.tuid
 
 import org.apache.log4j.Logger
 import org.eclipse.emf.ecore.EObject
@@ -25,13 +25,14 @@ import org.emftext.language.java.types.ClassifierReference
 import org.emftext.language.java.types.NamespaceClassifierReference
 import org.emftext.language.java.types.PrimitiveType
 import tools.vitruv.framework.tuid.HierarchicalTUIDCalculatorAndResolver
+import static tools.vitruv.domains.java.JavaNamespace.*
 
 /**
  * TUID calculator and resolver for the JaMoPP meta-model. 
  */
-class JaMoPPTUIDCalculatorAndResolver extends HierarchicalTUIDCalculatorAndResolver<JavaRoot> {
+class JavaTuidCalculatorAndResolver extends HierarchicalTUIDCalculatorAndResolver<JavaRoot> {
 
-	private val static Logger logger = Logger.getLogger(JaMoPPTUIDCalculatorAndResolver);
+	private val static Logger logger = Logger.getLogger(JavaTuidCalculatorAndResolver);
 
 	private val String CLASSIFIER_SELECTOR = "classifier"
 	private val String IMPORT_SELECTOR = "import"
@@ -44,10 +45,9 @@ class JaMoPPTUIDCalculatorAndResolver extends HierarchicalTUIDCalculatorAndResol
 	private val String IDENTIFIER_REFERENCE_SELECTOR = "identifierReference"
 	private val String NEW_CONSTRUCTOR_CALL_SELECTOR = "newConstructorCall"
 	private val String CONDITIONAL_EXPRESSION_SELECTOR = "conditionalExpression"
-	private static val String NS_URI = "http://www.emftext.org/java"
 	
 	new() {
-		super(NS_URI)
+		super(METAMODEL_NAMESPACE)
 	}
 
 	// ============================================================================
