@@ -1,4 +1,4 @@
-package tools.vitruv.domains.asem.metamodel
+package tools.vitruv.domains.asem
 
 import org.junit.Test
 import org.junit.Assert
@@ -10,15 +10,24 @@ import edu.kit.ipd.sdq.ASEM.classifiers.ClassifiersFactory
 import edu.kit.ipd.sdq.ASEM.dataexchange.DataexchangeFactory
 import edu.kit.ipd.sdq.ASEM.primitivetypes.PrimitivetypesFactory
 import org.eclipse.emf.ecore.EObject
+import org.junit.Before
+import tools.vitruv.framework.tuid.TuidManager
 
 class AsemMetamodelTest {
 	private static val TEST_NAME = "Test";
+	private var AsemMetamodel asemMetamodel;
+	
+	@Before
+	public def void setup() {
+		TuidManager.instance.reinitialize();
+		asemMetamodel = new AsemDomain().metamodel;
+	}
 	
 	@Test
 	public def void testResponsibilityChecks() {
 		val clazz = ClassifiersFactory.eINSTANCE.createClass();
-		Assert.assertTrue(AsemMetamodel.instance.hasMetaclassInstances(#[clazz]));
-		Assert.assertTrue(AsemMetamodel.instance.hasTUID(clazz));
+		Assert.assertTrue(asemMetamodel.hasMetaclassInstances(#[clazz]));
+		Assert.assertTrue(asemMetamodel.hasTUID(clazz));
 	}
 	
 	@Test
@@ -61,17 +70,11 @@ class AsemMetamodelTest {
 
 	
 	private def void assertTuid(EObject object, String expectedNamespaceUri, String expectedIdentifier) {
-		val tuidFragments = AsemMetamodel.getInstance().calculateTuid(object).toString.split("#");
+		val tuidFragments = asemMetamodel.calculateTuid(object).toString.split("#");
 		Assert.assertEquals(3, tuidFragments.length);
 		Assert.assertEquals(expectedNamespaceUri, tuidFragments.get(0));
 		Assert.assertNotNull(tuidFragments.get(1));
 		Assert.assertEquals(expectedIdentifier, tuidFragments.get(2));
 	}
 	
-	@Test
-	public def void testSingletonRealization() {
-		val instance1 = AsemMetamodel.instance;
-		val instance2 = AsemMetamodel.instance;
-		Assert.assertEquals(instance1, instance2);
-	}
 }
