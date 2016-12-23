@@ -267,7 +267,15 @@ public final class EcoreResourceBridge {
 				// results in errors loading JaMoPP models.
 			}
 			if (resource == null) {
+				
+				// FIXME [BR] Does only work for ASEMSysML transformations at the moment.
+				Resource oldResource = resourceSet.getResource(resourceURI, false);
+				if(oldResource != null) {
+					oldResource.delete(null);
+				}
+				
 				resource = resourceSet.createResource(resourceURI);
+				
 			} else {
 				resource.load(loadOptions);
 			}
