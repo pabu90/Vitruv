@@ -1,26 +1,26 @@
 language: java
 sudo: false
 jdk:
-  - oraclejdk8
-env:  
-  global:  
-    - DISPLAY=:99.0  
-cache:  
-  directories:  
-   - $HOME/.m2  
-
-# Handle git submodules yourself
+- oraclejdk8
+env:
+  global:
+  - DISPLAY=:99.0
+cache:
+  directories:
+  - $HOME/.m2
 git:
-    submodules: false
-
-# Enable UI
+  submodules: false
+addons:
+  sonarqube:
+    token:
+      secure: "ZZAIBOi9Tis7adD1pg93kpQ+ogVVoW3JRGz87ZD2xy7qJPasUxQmjgmnakwG6Wlr8oJDe+WvIOT0WyN6eXIqKSD+nNuXsb14t7jUBqbD8o/im6RMP7JEIVZWK+DJk4KVantrn7LPpGTXTTHex28Jt2PXHwNTAB48amxyNi+8Ij+UuzS2hfA9kSVH7nFyn8tSleshgfMimGfcsvjHE4YlUT800MFd6L7yV3ZSVCv8DvmxoyEada3/rbCwnXHsw9trYNzAfbgcgOWFckWbOt2TXACjVuS5lOGWmKQSnl5ZwMsMQzewxEN4L2UiHMJoG+3zB/t19Pora9GImAdNu0LrfUgdyQ9gorBP62JoYWDvggMxasnkrusRBLihMRnPM1PT9Ri5w2hEjnLqMDsM2IvK272majHSXDGj/PZ1nRd9sUfDsNRqZe1CPdxFOStWRc3OrUWCkjTIFxdPmKIeSUiWEcuR0eE/ecZRdNLrKPAQNOxemviDL4gpmh2/Lk8sORQwwgrXG01941gbA+/51CzR0AKi+PVbJFHgIc4sCqzHB64NiKOGOBLIPdiDV2cz8fMZ++ciJf1KFxfrW4t1dmbzrJuwRorIMugtGPX/6UhOXOe4gvwsP1mYEojnx1bet5F3FjQkC1bg4IE033j4EnLjGpeB5Ma45/xZnfUPhDu6SPE="
 before_install:
-    - sh -e /etc/init.d/xvfb start - sleep 10
-    - git clone --depth 1 https://github.com/kit-sdq/BuildUtilities.git /tmp/BuildUtilities
-    - . /tmp/BuildUtilities/travis-ci/installMaven.sh
+- sh -e /etc/init.d/xvfb start - sleep 10
+- git clone --depth 1 https://github.com/kit-sdq/BuildUtilities.git /tmp/BuildUtilities
+- . /tmp/BuildUtilities/travis-ci/installMaven.sh
 install: true
-
-script: mvn clean verify
-
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 after_success:
-- . /tmp/BuildUtilities/travis-ci/deploy.sh framework releng/tools.vitruv.updatesite.aggregated final vitruv-tools updatesite
+- . /tmp/BuildUtilities/travis-ci/deploy.sh framework releng/tools.vitruv.updatesite.aggregated
+  final vitruv-tools updatesite
