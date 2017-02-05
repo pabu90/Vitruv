@@ -23,6 +23,9 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<xtext.version>2.10.0</xtext.version>
 		<tycho.version>0.26.0</tycho.version>
+		
+		<!-- Sonar configuration -->
+		<sonar.projectName>Vitruv</sonar.projectName> <!-- Name of the project for web interface - don't overwrite when already in DB! -->
 	</properties>
 
 	<repositories>
@@ -46,6 +49,12 @@
 
 	<build>
 		<plugins>
+			<!-- Specify the version of sonar-maven-plugin instead of using the latest (recommended) -->
+			<plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>3.2</version>
+      </plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -66,7 +75,7 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.eclipse.xtend</groupId>
 				<artifactId>xtend-maven-plugin</artifactId>
@@ -83,7 +92,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
@@ -112,7 +121,7 @@
 				<version>${tycho.version}</version>
 				<extensions>true</extensions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
