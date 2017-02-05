@@ -7,20 +7,22 @@ env:
   - DISPLAY=:99.0
 cache:
   directories:
-  - $HOME/.m2
+  - "$HOME/.m2"
+  - '$HOME/.sonar/cache'
 git:
   submodules: false
 addons:
   sonarqube:
     token:
-      secure: "ZZAIBOi9Tis7adD1pg93kpQ+ogVVoW3JRGz87ZD2xy7qJPasUxQmjgmnakwG6Wlr8oJDe+WvIOT0WyN6eXIqKSD+nNuXsb14t7jUBqbD8o/im6RMP7JEIVZWK+DJk4KVantrn7LPpGTXTTHex28Jt2PXHwNTAB48amxyNi+8Ij+UuzS2hfA9kSVH7nFyn8tSleshgfMimGfcsvjHE4YlUT800MFd6L7yV3ZSVCv8DvmxoyEada3/rbCwnXHsw9trYNzAfbgcgOWFckWbOt2TXACjVuS5lOGWmKQSnl5ZwMsMQzewxEN4L2UiHMJoG+3zB/t19Pora9GImAdNu0LrfUgdyQ9gorBP62JoYWDvggMxasnkrusRBLihMRnPM1PT9Ri5w2hEjnLqMDsM2IvK272majHSXDGj/PZ1nRd9sUfDsNRqZe1CPdxFOStWRc3OrUWCkjTIFxdPmKIeSUiWEcuR0eE/ecZRdNLrKPAQNOxemviDL4gpmh2/Lk8sORQwwgrXG01941gbA+/51CzR0AKi+PVbJFHgIc4sCqzHB64NiKOGOBLIPdiDV2cz8fMZ++ciJf1KFxfrW4t1dmbzrJuwRorIMugtGPX/6UhOXOe4gvwsP1mYEojnx1bet5F3FjQkC1bg4IE033j4EnLjGpeB5Ma45/xZnfUPhDu6SPE="
+      secure: "RRacdDtDjmYJkcrgcKyEXPvv9S8mgaTejwqe4D7y0zM9DaYyNtmUHEwecHvvdLDITxNPbryNn859HhPuuYU63Jh3mqdc+MzUGrgmsat6RWmRdaI/QuHQbjngXCtoMoHvApQl9Q0x6FRzIWq7dkqdLeew5jSsG1947qgK4hJY+q7YQe7mQoDsSFQRX0CACb7IvMWGuWFHHDFFSeVgSIb7AvZe/9ePwmIkS47+y/JPXve6s5Trcyeh1rmUC+dOE7t6bmyhn1peRNC3g+sZizfKcqd6rYrLxlMzz4jhAk/GZLJtjglcsOkdZKRMkSAfbmRS8YokGFKN9y3ssgu7dNP47MKs5nzpTBU0QhuE6t51xR+ulTm2HNX8TklVO496LmjEdRsHpVwX1fkjPAUBDRbF8QmB69PBe1jHxkqnqPzBe+nu7yN3gIBPig80WC+oEXq1gOggNLeVHyFZaJLJAhhcw/8YiThRLPF35Laj3x65KgJvR/LBQoiokgVLo1JUV4wBfgJ8OnW1LvA2mi8MHEtECSsS/ekBCYc1JpyALheDkWEAeZXAl4482nV+jncyq6RcVRKu5gSWbGPc0gmrQeJBIvs85jFivG3Ranu7zYrxT6GzuyZZCRE1c4tVOolyZJCs0Tbe+bD4IqgECpYb8/foJ9Uod6gqs+0RcEsTzZyxoP8="
 before_install:
 - sh -e /etc/init.d/xvfb start - sleep 10
 - git clone --depth 1 https://github.com/kit-sdq/BuildUtilities.git /tmp/BuildUtilities
-- . /tmp/BuildUtilities/travis-ci/installMaven.sh
+- ". /tmp/BuildUtilities/travis-ci/installMaven.sh"
 install: true
 script:
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+- mvn clean install
+- mvn org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
 after_success:
-- . /tmp/BuildUtilities/travis-ci/deploy.sh framework releng/tools.vitruv.updatesite.aggregated
-  final vitruv-tools updatesite
+- ". /tmp/BuildUtilities/travis-ci/deploy.sh framework releng/tools.vitruv.updatesite.aggregated
+  final vitruv-tools updatesite"
