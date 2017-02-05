@@ -16,14 +16,8 @@ before_install:
 - sh -e /etc/init.d/xvfb start - sleep 10
 - git clone --depth 1 https://github.com/kit-sdq/BuildUtilities.git /tmp/BuildUtilities
 - ". /tmp/BuildUtilities/travis-ci/installMaven.sh"
+- echo "MAVEN_OPTS='-Xmx2048m -XX:MaxPermSize=512m'" > ~/.mavenrc
 install: true
-before_script:
- - "echo $JAVA_OPTS"
- - "echo $MAVEN_OPTS"
- - "export JAVA_OPTS=-Xmx512m"
- - "export MAVEN_OPTS=-Xmx512m"
- - "echo $JAVA_OPTS"
- - "echo $MAVEN_OPTS"
 script:
 - mvn clean install
 - mvn sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=$SONAR_TOKEN
