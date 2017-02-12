@@ -11,7 +11,7 @@ inputs:
 
 run:
   path: mvn
-  args: ["clean", "install"]
+  args: ["-f", "vitruv-git-repo/pom.xml", "clean", "install"]
 
 params:
   MAVEN_BASEDIR: vitruv-git-repo
