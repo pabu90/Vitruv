@@ -10,7 +10,7 @@ inputs:
   - name: vitruv-git-repo
 
 run:
-  path: vitruv-git-repo/mvn
+  path: mvn
   args: ["clean", "install"]
 
 params:
