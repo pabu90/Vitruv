@@ -1,0 +1,15 @@
+resources:
+- name: vitruv-git-repo
+  type: git
+  source:
+    uri: https://github.com/pabu90/Vitruv.git
+    branch: master
+
+jobs:
+  - name: package
+    plan:
+    - get: vitruv-git-repo
+      trigger: true
+    - task: mvn-clean-install
+      privileged: true
+      file: vitruv-git-repo/concourse/tasks/mvn-clean-install.yml
