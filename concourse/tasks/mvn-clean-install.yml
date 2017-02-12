@@ -10,5 +10,8 @@ inputs:
   - name: vitruv-git-repo
 
 run:
-  path: mvn
+  path: vitruv-git-repo/mvn
   args: ["clean", "install"]
+
+params:
+  MAVEN_BASEDIR: vitruv-git-repo

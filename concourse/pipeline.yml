@@ -4,9 +4,37 @@ resources:
   source:
     uri: https://github.com/pabu90/Vitruv.git
     branch: master
+    private_key: |
+      -----BEGIN RSA PRIVATE KEY-----
+      MIIEowIBAAKCAQEA1qcC76h/5suSbJ+rtG/C+/WXR81ow2RSAsn/oVXDVwerXU1Q
+      KaKuw8S6wBX6k91PF+t0GFmtkq0r+2e+y/Ao+TZMixHQKB2kVRPXQJxnMWB0SOK9
+      ITFbozzyhtyWkQx8YSwC19UliGBZ19Wn3ihVXG5r45KS7AxbOjvxWRvrKEAW5df2
+      k1yCFqlLByB7ZbsmeBt8vgf8XMkQPSrTPP3y/Q+J7j3k7g+rhwVAU4bSGGu1Ks2a
+      RxkjuUgwCI4y1QzGUAXDaGi0VTgZW7y/vFEwHEHLGIvgHHZbD/qYKqhqjys1uXDp
+      YmL7nIhxmLDBO0uNM4JaNPKd/DoMsH//5gX/zwIDAQABAoIBACdbF765NjoquP4R
+      iHncw/NOZB5WGw84JZE9WBFMmDQsw86njjsUCNb8CwGNBhR2TzojgXW1e42ZEqdV
+      rjXWIq0Ot5oH+hJg3PB8YssF4iW7eZaje+nKEvMrCYyQhUqy71shpqPMAMWwZMid
+      89lXq872r/FZvnZpDZDvzKB57fPC9nj/MSxYWObvWrhFnRs94/0gfVkLDKRMEGE7
+      TGMj/ew+A1h4UbhczJUEgu+x0rVHyH7vfejPrOKpF2POw9FVPtY1fZpRAdFPj5nV
+      NoVwfeaNH4PHR7NHNq/Bd2WtGu+wJ1qkHWF/hBBrdk5p+ySS2P07d3yjbecClZzH
+      eJRl+IECgYEA7KIleT+uLPbWOB5kIk9MCA1H5WbJ6qcPfdCsF7LQEkQXKUmGU7eo
+      9G4qNSpy5RaoStT7HkWUg9LW766JjIbjBglAIDmJQFCI3Z0WZzJk+nCWF6tc2OC+
+      5CK/tnsFfSk0ezZ+/Jri4D2ZAoLJXSQOzDCSjBX2/PWi/dLpKeCs5E0CgYEA6DhT
+      2XWQ57euOUQViy24bJWujZfUndMyJLfr3VHtFpOPZUcRV5bmx8LuTeIS2htyVWYD
+      o174ZuxzbGQdB8tp1Sq6TqY1xySyn2wN9ylN+IDTdFg+zhThLivHK9hyKypqIu5r
+      G1wwkEssphj3NWvRbdXYhl0hlTakw+LDt8VLMosCgYArrpsAUPMUNdTBs0qE0uKU
+      Me9tt5XajVBcx2KdVVL3rD4iTwJO/f5gcN21xspC4/XZKovYwLtzwj4PLMcTe+r4
+      uEhwKm7dwoAheNgj4LenS5VJdUbEemiCsK93Pip7OloHzL2QX/81qelO/1mwqfFZ
+      XDYRShS4CZg3BvIn2uPPmQKBgQCi7EIH47ASopAdpWLoDt/BbxLUTJ3jTPV1RYS5
+      9my81jJZAA9uwHSR2nWPNvm7BF6nA7exu0PUEji451Rmz5Qk9qFX5Mz+NwULTKhP
+      rC8EFn5EtlT6CTQjTJuka2tOVae5ckS7IWcBFXzx27o1RLver5YGTvjs0zWuKT7f
+      hBBKGQKBgCTrQ9a7x4OP6I/ulhakT8Wd63Cf0j9vjG5C0gWui2Rl9KiyX8wGicxH
+      ejqxh6iA033YNm1efMl3yGa9AC2M4iUr4g474xCz7KfhiYZI/mhNQNE8jMoeljS6
+      dq0TRzlAPUSgDkpI4dKrMaTMDnKQRrFzWPwIJnGl7jDPKakzz8LU
+      -----END RSA PRIVATE KEY-----
 
 jobs:
-  - name: package
+  - name: build
     plan:
     - get: vitruv-git-repo
       trigger: true
