@@ -14,7 +14,8 @@ run:
   args:
   - -exc
   - |
-    apt-get install gtk
+    apt-get update
+    apt-get install libgtk2.0-0
     mvn -f vitruv-git-repo/pom.xml clean install
 
 params:
