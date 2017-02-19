@@ -10,8 +10,13 @@ inputs:
   - name: vitruv-git-repo
 
 run:
-  path: mvn
-  args: ["-f", "vitruv-git-repo/pom.xml", "clean", "install"]
+  path: sh
+  args:
+  - -exc
+  - |
+    whoami
+    env
+    find .
 
 params:
   MAVEN_BASEDIR: vitruv-git-repo
