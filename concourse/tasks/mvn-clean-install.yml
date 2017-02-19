@@ -16,6 +16,8 @@ run:
   - |
     apt-get update
     apt-get install -y xvfb
+    export DISPLAY=:99
+    echo "MAVEN_OPTS='-Xmx2048m -XX:MaxPermSize=512m'" > ~/.mavenrc
     xvfb-run mvn -f vitruv-git-repo/pom.xml clean install
 
 params:
