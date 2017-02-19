@@ -14,9 +14,8 @@ run:
   args:
   - -exc
   - |
-    whoami
-    env
-    find .
+    apt-get install gtk
+    mvn -f vitruv-git-repo/pom.xml clean install
 
 params:
   MAVEN_BASEDIR: vitruv-git-repo
