@@ -26,6 +26,8 @@
 
 		<!-- Sonar configuration -->
 		<sonar.projectName>Vitruv</sonar.projectName> <!-- Name of the project for web interface - don't overwrite when already in DB! -->
+		<sonar.sources>.</sonar.sources>
+		<sonar.exclusions>src-gen/**, target/**, model-gen/**</sonar.exclusions>
 	</properties>
 
 	<repositories>
