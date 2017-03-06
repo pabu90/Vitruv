@@ -19,7 +19,7 @@ before_install:
 - echo "MAVEN_OPTS='-Xmx2048m -XX:MaxPermSize=512m'" > ~/.mavenrc
 install: true
 script:
-- mvn clean install
+- mvn clean install -Pprocess-xtend-code
 - mvn org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=$SONAR_TOKEN
 after_success:
 - ". /tmp/BuildUtilities/travis-ci/deploy.sh framework releng/tools.vitruv.updatesite.aggregated

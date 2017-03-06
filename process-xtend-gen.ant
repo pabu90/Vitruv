@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<project name="project">
+
+    <target name="process-xtend-gen">
+        <echo message="" />
+        <echo message="Replacing in ${project.basedir}" />
+        <echo message="" />
+
+        <replace dir="${project.basedir}" token='@SuppressWarnings("all")' value="">
+            <include name="**/*.java" />
+        </replace>
+    </target>
+
+</project>
