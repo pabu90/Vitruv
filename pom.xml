@@ -185,7 +185,7 @@
                     <property name="project.basedir" value="${project.basedir}" />
 
                     <ant
-                      antfile="${project.basedir}/../process-xtend-gen.ant">
+                      antfile="${project.basedir}/../Vitruv/process-xtend-gen.ant">
                       <target name="process-xtend-gen" />
                     </ant>
                   </target>
