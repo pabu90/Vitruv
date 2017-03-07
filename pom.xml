@@ -185,9 +185,9 @@
                   <skip>!${process-xtend-gen}</skip>
                   <target>
 										<property name="project.basedir" value="${project.basedir}" />
-										
+
                     <ant
-                      antfile="${session.executionRootDirectory}/ant/process-xtend-gen.ant">
+                      antfile="${user.dir}/ant/process-xtend-gen.ant">
                       <target name="process-xtend-gen" />
                     </ant>
                   </target>
