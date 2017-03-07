@@ -8,6 +8,8 @@
 	<version>0.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<name>Vitruv</name>
+
 	<modules>
 		<module>bundles</module>
 		<module>features</module>
@@ -185,7 +187,7 @@
                     <property name="project.basedir" value="${project.basedir}" />
 
                     <ant
-                      antfile="${project.basedir}/../Vitruv/process-xtend-gen.ant">
+                      antfile="${project.basedir}/../ant/process-xtend-gen.ant">
                       <target name="process-xtend-gen" />
                     </ant>
                   </target>
