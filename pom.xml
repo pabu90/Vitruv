@@ -27,7 +27,7 @@
 		<tycho.version>0.26.0</tycho.version>
 
 		<!-- Sonar configuration -->
-		<!--  <sonar.projectName>Vitruv</sonar.projectName> <!-- Name of the project for web interface - don't overwrite when already in DB! -->
+		<!--  <sonar.projectName>Vitruv</sonar.projectName> Name of the project for web interface - don't overwrite when already in DB! -->
 		<sonar.projectKey>tools-vitruv</sonar.projectKey>
 		<sonar.sources>.</sonar.sources>
 		<sonar.exclusions>src-gen/**, target/**, model-gen/**</sonar.exclusions>
